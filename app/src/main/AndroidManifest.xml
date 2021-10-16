@@ -29,7 +29,7 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
-                <action android:name="OPEN_ORDER" />
+                <action android:name="OPEN_CONTRACT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

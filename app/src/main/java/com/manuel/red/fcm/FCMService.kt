@@ -70,15 +70,13 @@ class FCMService : FirebaseMessagingService() {
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT)
         val channelId = getString(R.string.notification_channel_id_default)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_stat_name)
-            .setContentTitle(notification.title)
-            .setContentText(notification.body)
-            .setAutoCancel(true)
-            .setSound(defaultSoundUri)
-            .setColor(ContextCompat.getColor(this, R.color.orange_a400))
-            .setContentIntent(pendingIntent)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(notification.body))
+        val notificationBuilder =
+            NotificationCompat.Builder(this, channelId).setSmallIcon(R.drawable.ic_stat_name)
+                .setContentTitle(notification.title).setContentText(notification.body)
+                .setAutoCancel(true).setSound(defaultSoundUri)
+                .setColor(ContextCompat.getColor(this, R.color.orange_a400))
+                .setContentIntent(pendingIntent)
+                .setStyle(NotificationCompat.BigTextStyle().bigText(notification.body))
         bitmap?.let {
             notificationBuilder.setLargeIcon(bitmap).setStyle(
                 NotificationCompat.BigPictureStyle().bigPicture(bitmap).bigLargeIcon(null)

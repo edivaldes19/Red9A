@@ -15,7 +15,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             findPreference<SwitchPreferenceCompat>(getString(R.string.offers_and_promotions_key))
         switchPreferenceCompat?.setOnPreferenceChangeListener { _, newValue ->
             (newValue as? Boolean)?.let { isChecked ->
-                val topic = getString(R.string.settings_topic_offers)
+                val topic = getString(R.string.main_topic)
                 if (isChecked) {
                     Firebase.messaging.subscribeToTopic(topic).addOnSuccessListener {
                         Toast.makeText(
