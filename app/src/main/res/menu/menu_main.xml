@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_profile"
+        android:title="@string/my_profile"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_requested_contract_history"
+        android:icon="@drawable/ic_history_contracts"
+        android:title="@string/my_contracts"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_sign_off"
+        android:title="@string/sign_off"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_offers_and_promotions"
+        android:icon="@drawable/ic_local_offer"
+        android:title=""
+        app:showAsAction="ifRoom" />
+</menu>

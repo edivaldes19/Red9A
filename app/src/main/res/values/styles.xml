@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="LoginTheme" parent="FirebaseUI">
+        <item name="colorPrimary">@color/blue_700</item>
+        <item name="colorPrimaryDark">@color/blue_700_dark</item>
+        <item name="colorAccent">@color/orange_a400_dark</item>
+        <item name="colorControlNormal">@color/blue_700</item>
+        <item name="colorControlActivated">@color/blue_700_dark</item>
+        <item name="colorControlHighlight">@color/blue_700_light</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="PreferencesTheme" parent="Theme.Red">
+        <item name="colorSecondary">@color/orange_a400_dark</item>
+    </style>
+
+    <style name="Theme.Red.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Red.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Red.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="common_padding_min">8dp</dimen>
+    <dimen name="common_padding_default">16dp</dimen>
+    <dimen name="common_padding_max">24dp</dimen>
+    <dimen name="package_service_img_width">175dp</dimen>
+    <dimen name="package_service_preview_contract_list_height">80dp</dimen>
+    <dimen name="package_service_contract_list_img_size">48dp</dimen>
+    <dimen name="contract_status_margin_bottom_progress">14dp</dimen>
+    <dimen name="chat_guideline_end">48dp</dimen>
+    <dimen name="chat_stroke">1dp</dimen>
+    <dimen name="chat_margin_horizontal">64dp</dimen>
+    <dimen name="profile_width_text_field">260dp</dimen>
+    <dimen name="login_button_width">300dp</dimen>
+</resources>

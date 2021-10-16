@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true">
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vpPackageService"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/tvName"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/common_padding_default"
+        android:layout_marginTop="@dimen/common_padding_default"
+        android:textAlignment="textStart"
+        android:textAppearance="?attr/textAppearanceHeadline3"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@id/nsvDetailsPackageService"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vpPackageService"
+        tools:text="Nombre" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/efab"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/common_padding_default"
+        android:text="@string/add_to_the_list"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        app:icon="@drawable/ic_history_contracts"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/tvName"
+        app:layout_constraintStart_toStartOf="@id/tvName" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSub"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/common_padding_max"
+        android:src="@drawable/ic_remove"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toTopOf="@id/efab"
+        app:layout_constraintStart_toStartOf="@id/tvName"
+        app:tint="@color/white"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilNewAvailable"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_padding_min"
+        app:layout_constraintBottom_toBottomOf="@id/fabSub"
+        app:layout_constraintStart_toEndOf="@id/fabSub"
+        app:layout_constraintTop_toTopOf="@id/fabSub">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etNewAvailable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="3"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:textAlignment="center"
+            tools:text="5" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_padding_min"
+        android:src="@drawable/ic_add"
+        app:fabSize="mini"
+        app:layout_constraintBottom_toBottomOf="@id/fabSub"
+        app:layout_constraintStart_toEndOf="@id/tilNewAvailable"
+        app:layout_constraintTop_toTopOf="@id/fabSub"
+        app:tint="@color/white"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvAvailable"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/common_padding_default"
+        android:text="@string/detail_available"
+        android:textAppearance="?attr/textAppearanceSubtitle1"
+        app:layout_constraintBottom_toTopOf="@id/fabSub"
+        app:layout_constraintEnd_toEndOf="@id/tvName"
+        app:layout_constraintStart_toStartOf="@id/tvName" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tvTotalPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/common_padding_default"
+        android:text="@string/detail_total_price"
+        android:textAppearance="?attr/textAppearanceSubtitle2"
+        app:layout_constraintBottom_toBottomOf="@id/fabSub"
+        app:layout_constraintEnd_toEndOf="@id/tvName"
+        app:layout_constraintStart_toEndOf="@id/fabSum"
+        app:layout_constraintTop_toTopOf="@id/fabSub" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsvDetailsPackageService"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginVertical="@dimen/common_padding_default"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/tvAvailable"
+        app:layout_constraintEnd_toEndOf="@id/tvName"
+        app:layout_constraintStart_toStartOf="@id/tvName"
+        app:layout_constraintTop_toBottomOf="@id/tvName">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_padding_default"
+                android:layout_marginBottom="@dimen/common_padding_default"
+                android:textAlignment="textStart"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                tools:text="Descripción" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_padding_default"
+                android:layout_marginBottom="@dimen/common_padding_default"
+                android:textAlignment="textStart"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                tools:text="Precio" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvSpeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_padding_default"
+                android:layout_marginBottom="@dimen/common_padding_default"
+                android:textAlignment="textStart"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                tools:text="Velocidad" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvLimit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_padding_default"
+                android:layout_marginBottom="@dimen/common_padding_default"
+                android:textAlignment="textStart"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                tools:text="Límite" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvValidity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/common_padding_default"
+                android:layout_marginBottom="@dimen/common_padding_default"
+                android:textAlignment="textStart"
+                android:textAppearance="?attr/textAppearanceHeadline6"
+                tools:text="Vigencia" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>isOfferAndPromoDay</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>offerAndPromoCounter</key>
+        <value>0</value>
+    </entry>
+    <entry>
+        <key>percentage</key>
+        <value>0</value>
+    </entry>
+    <entry>
+        <key>imagePath</key>
+        <value>noImage</value>
+    </entry>
+    <entry>
+        <key>message</key>
+        <value>Aún no se han publicado promociones.</value>
+    </entry>
+</defaultsMap>
