@@ -14,7 +14,7 @@ object Constants {
     const val PROP_USER_ID = "userId"
     const val PROP_STATUS = "status"
     const val PROP_AVAILABLE = "available"
-    const val USER_PROP_AVAILABLE = "available_package_service"
+    const val USER_PROP_DISCOUNT = "discount_package_service"
     const val PATH_PACKAGE_SERVICE_IMAGES = "package_service_images"
     const val PATH_PROFIlE = "profile"
     const val MY_IMAGE = "my_image"

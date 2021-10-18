@@ -1,5 +1,6 @@
 package com.manuel.red.offers_and_promotions
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -24,8 +25,8 @@ class OffersAndPromotionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentOffersAndPromotionsBinding.inflate(inflater, container, false)
-        binding?.let { fragmentOffersAndPromotionsBinding ->
-            return fragmentOffersAndPromotionsBinding.root
+        binding?.let { view ->
+            return view.root
         }
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -37,29 +38,29 @@ class OffersAndPromotionsFragment : Fragment() {
     }
 
     private fun configActionBar() {
-        (activity as? AppCompatActivity)?.let { appCompatActivity ->
-            appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            mainTitle = appCompatActivity.supportActionBar?.title.toString()
-            appCompatActivity.supportActionBar?.title = getString(R.string.offers_and_promotions)
+        (activity as? AppCompatActivity)?.let { activity ->
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            mainTitle = activity.supportActionBar?.title.toString().trim()
+            activity.supportActionBar?.title = getString(R.string.offers_and_promotions)
             setHasOptionsMenu(true)
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun configRemoteConfig() {
         val remoteConfig = Firebase.remoteConfig
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val percentage = remoteConfig.getDouble("percentage")
-                val photoUrl = remoteConfig.getString("imagePath")
+                val percentage = remoteConfig.getLong("percentage")
+                val imagePath = remoteConfig.getString("imagePath")
                 val message = remoteConfig.getString("message")
-                binding?.let { fragmentOffersAndPromotionsBinding ->
-                    fragmentOffersAndPromotionsBinding.tvMessage.text = message
-                    fragmentOffersAndPromotionsBinding.tvPercentage.text = percentage.toString()
-                    Glide.with(this).load(photoUrl).diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .placeholder(R.drawable.ic_error_outline).error(R.drawable.ic_local_offer)
-                        .centerCrop()
-                        .into(fragmentOffersAndPromotionsBinding.imgOffersAndPromotions)
+                binding?.let { view ->
+                    view.tvMessage.text = message
+                    view.tvPercentage.text = "${getString(R.string.discount_from)} $percentage%"
+                    Glide.with(this).load(imagePath).diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_local_offer)
+                        .centerCrop().into(view.imgOffersAndPromotions)
                 }
             }
         }
@@ -79,9 +80,9 @@ class OffersAndPromotionsFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        (activity as? AppCompatActivity)?.let {
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            it.supportActionBar?.title = mainTitle
+        (activity as? AppCompatActivity)?.let { activity ->
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            activity.supportActionBar?.title = mainTitle
             setHasOptionsMenu(false)
         }
         super.onDestroy()

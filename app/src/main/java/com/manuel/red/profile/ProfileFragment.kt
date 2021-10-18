@@ -41,11 +41,11 @@ class ProfileFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
             if (activityResult.resultCode == Activity.RESULT_OK) {
                 photoSelectedUri = activityResult.data?.data
-                binding?.let { fragmentProfileBinding ->
+                binding?.let { view ->
                     Glide.with(this).load(photoSelectedUri).diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ic_cloud_download)
                         .error(R.drawable.ic_error_outline).centerCrop().circleCrop()
-                        .into(fragmentProfileBinding.imgProfile)
+                        .into(view.imgProfile)
                 }
             }
         }
@@ -56,8 +56,8 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        binding?.let { fragmentProfileBinding ->
-            return fragmentProfileBinding.root
+        binding?.let { view ->
+            return view.root
         }
         return super.onCreateView(inflater, container, savedInstanceState)
     }

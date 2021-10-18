@@ -23,8 +23,8 @@ class DetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDetailBinding.inflate(inflater, container, false)
-        binding?.let { fragmentDetailBinding ->
-            return fragmentDetailBinding.root
+        binding?.let { view ->
+            return view.root
         }
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -50,8 +50,7 @@ class DetailFragment : Fragment() {
                 binding.tvDescription.text =
                     "${getString(R.string.description)}: ${packageService1.description}"
                 binding.tvPrice.text = "${getString(R.string.price)}: $${packageService1.price} MXN"
-                binding.tvSpeed.text =
-                    "${getString(R.string.speed)}: $${packageService1.speed} Mbps"
+                binding.tvSpeed.text = "${getString(R.string.speed)}: ${packageService1.speed} Mbps"
                 binding.tvLimit.text = "${getString(R.string.limit)}: ${packageService1.limit} Gbps"
                 binding.tvValidity.text =
                     "${getString(R.string.validity)}: ${packageService1.validity} ${getString(R.string.months)}"
@@ -75,15 +74,15 @@ class DetailFragment : Fragment() {
     }
 
     private fun setNewAvailable(packageService: PackageService) {
-        binding?.let { fragmentDetailBinding ->
-            fragmentDetailBinding.etNewAvailable.setText(packageService.newAvailable.toString())
+        binding?.let { view ->
+            view.etNewAvailable.setText(packageService.newAvailable.toString())
             val newAvailableStr = getString(
                 R.string.detail_total_price,
                 packageService.totalPrice(),
                 packageService.newAvailable,
                 packageService.price
             )
-            fragmentDetailBinding.tvTotalPrice.text =
+            view.tvTotalPrice.text =
                 HtmlCompat.fromHtml(newAvailableStr, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }

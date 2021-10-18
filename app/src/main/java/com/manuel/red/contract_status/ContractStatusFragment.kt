@@ -29,8 +29,8 @@ class ContractStatusFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentContractStatusBinding.inflate(inflater, container, false)
-        binding?.let {
-            return it.root
+        binding?.let { view ->
+            return view.root
         }
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -63,21 +63,21 @@ class ContractStatusFragment : Fragment() {
 
     private fun getRequestedContract() {
         requestedContract = (activity as? RequestedContractAux)?.getRequestedContractSelected()
-        requestedContract?.let {
-            updateUI(it)
-            getRequestedContractInRealtime(it.id)
+        requestedContract?.let { contract ->
+            updateUI(contract)
+            getRequestedContractInRealtime(contract.id)
             setupActionBar()
             configAnalytics()
         }
     }
 
     private fun updateUI(requestedContract: RequestedContract) {
-        binding?.let { fragmentContractStatusBinding ->
-            fragmentContractStatusBinding.progressBar.progress =
+        binding?.let { view ->
+            view.progressBar.progress =
                 requestedContract.status * (100 / 3) - 15
-            fragmentContractStatusBinding.cbOnHold.isChecked = requestedContract.status > 0
-            fragmentContractStatusBinding.cbActivated.isChecked = requestedContract.status > 1
-            fragmentContractStatusBinding.cbTimedOut.isChecked = requestedContract.status > 2
+            view.cbOnHold.isChecked = requestedContract.status > 0
+            view.cbActivated.isChecked = requestedContract.status > 1
+            view.cbTimedOut.isChecked = requestedContract.status > 2
         }
     }
 

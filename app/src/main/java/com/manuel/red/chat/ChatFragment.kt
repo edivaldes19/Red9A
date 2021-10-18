@@ -33,8 +33,8 @@ class ChatFragment : Fragment(), OnChatListener {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentChatBinding.inflate(inflater, container, false)
-        binding?.let { fragmentChatBinding ->
-            return fragmentChatBinding.root
+        binding?.let { view ->
+            return view.root
         }
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -73,10 +73,10 @@ class ChatFragment : Fragment(), OnChatListener {
             val messageRef =
                 database.getReference(Constants.PATH_CHATS).child(it.id).child(message.id)
             messageRef.removeValue { error, _ ->
-                binding?.let { fragmentChatBinding ->
+                binding?.let { view ->
                     if (error != null) {
                         Snackbar.make(
-                            fragmentChatBinding.root,
+                            view.root,
                             getString(R.string.error_clearing_message),
                             Snackbar.LENGTH_SHORT
                         ).show()
@@ -126,9 +126,9 @@ class ChatFragment : Fragment(), OnChatListener {
 
                 override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
                 override fun onCancelled(error: DatabaseError) {
-                    binding?.let { fragmentChatBinding ->
+                    binding?.let { view ->
                         Snackbar.make(
-                            fragmentChatBinding.root,
+                            view.root,
                             getString(R.string.error_loading_chat_messages),
                             Snackbar.LENGTH_SHORT
                         ).show()
@@ -141,9 +141,7 @@ class ChatFragment : Fragment(), OnChatListener {
 
     private fun getMessage(snapshot: DataSnapshot): Message? {
         snapshot.getValue(Message::class.java)?.let { message ->
-            snapshot.key?.let { it ->
-                message.id = it
-            }
+            snapshot.key?.let { it -> message.id = it }
             FirebaseAuth.getInstance().currentUser?.let { user ->
                 message.myUid = user.uid
             }
@@ -154,8 +152,8 @@ class ChatFragment : Fragment(), OnChatListener {
 
     private fun setupRecyclerView() {
         chatAdapter = ChatAdapter(mutableListOf(), this)
-        binding?.let { fragmentChatBinding ->
-            fragmentChatBinding.recyclerView.apply {
+        binding?.let { view ->
+            view.recyclerView.apply {
                 layoutManager = LinearLayoutManager(context).also { linearLayoutManager ->
                     linearLayoutManager.stackFromEnd = true
                 }
@@ -167,7 +165,15 @@ class ChatFragment : Fragment(), OnChatListener {
     private fun setupButtons() {
         binding?.let { binding ->
             binding.fabSend.setOnClickListener {
-                sendMessage()
+                if (binding.etMessage.text.isNullOrEmpty()) {
+                    binding.tilMessage.run {
+                        error = getString(R.string.this_field_is_required)
+                        requestFocus()
+                    }
+                } else {
+                    binding.tilMessage.error = null
+                    sendMessage()
+                }
             }
         }
     }

@@ -31,6 +31,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:trackCornerRadius="@dimen/common_padding_max"
             tools:progress="50" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -42,7 +43,7 @@
         android:buttonTint="?colorSecondaryVariant"
         android:text="@string/contract_status_on_hold"
         android:textAppearance="?attr/textAppearanceSubtitle1"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/clProgress"
         app:layout_constraintStart_toStartOf="@id/clProgress"
         app:layout_constraintTop_toTopOf="@id/clProgress" />
 
@@ -55,7 +56,7 @@
         android:text="@string/contract_status_activated"
         android:textAppearance="?attr/textAppearanceSubtitle1"
         app:layout_constraintBottom_toTopOf="@id/cbTimedOut"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/clProgress"
         app:layout_constraintStart_toStartOf="@id/clProgress"
         app:layout_constraintTop_toBottomOf="@id/cbOnHold" />
 
@@ -68,7 +69,6 @@
         android:text="@string/contract_status_timed_out"
         android:textAppearance="?attr/textAppearanceSubtitle1"
         app:layout_constraintBottom_toBottomOf="@id/clProgress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/clProgress"
-        app:layout_constraintTop_toBottomOf="@id/cbActivated" />
+        app:layout_constraintEnd_toEndOf="@id/clProgress"
+        app:layout_constraintStart_toStartOf="@id/clProgress" />
 </androidx.constraintlayout.widget.ConstraintLayout>

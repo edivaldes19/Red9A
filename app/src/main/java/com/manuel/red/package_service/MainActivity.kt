@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     private lateinit var packageServiceAdapter: PackageServiceAdapter
     private lateinit var listenerRegistration: ListenerRegistration
     private var packageServiceSelected: PackageService? = null
-    private val packageServiceContractListList = mutableListOf<PackageService>()
+    private val packageServiceContractList = mutableListOf<PackageService>()
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private val errorSnack: Snackbar by lazy {
         Snackbar.make(binding.root, "", Snackbar.LENGTH_SHORT).setTextColor(Color.RED)
@@ -199,9 +199,9 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     }
 
     override fun onClick(packageService: PackageService) {
-        val index = packageServiceContractListList.indexOf(packageService)
+        val index = packageServiceContractList.indexOf(packageService)
         packageServiceSelected = if (index != -1) {
-            packageServiceContractListList[index]
+            packageServiceContractList[index]
         } else {
             packageService
         }
@@ -216,7 +216,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     }
 
     override fun getPackagesServicesContractList(): MutableList<PackageService> =
-        packageServiceContractListList
+        packageServiceContractList
 
     override fun getPackageServiceSelected(): PackageService? = packageServiceSelected
     override fun showButton(isVisible: Boolean) {
@@ -224,18 +224,18 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     }
 
     override fun addPackageServiceToContractList(packageService: PackageService) {
-        val index = packageServiceContractListList.indexOf(packageService)
+        val index = packageServiceContractList.indexOf(packageService)
         if (index != -1) {
-            packageServiceContractListList[index] = packageService
+            packageServiceContractList[index] = packageService
         } else {
-            packageServiceContractListList.add(packageService)
+            packageServiceContractList.add(packageService)
         }
         updateTotal()
     }
 
     override fun updateTotal() {
         var total = 0
-        packageServiceContractListList.forEach { packageService ->
+        packageServiceContractList.forEach { packageService ->
             total += packageService.totalPrice()
         }
         if (total == 0) {
@@ -246,7 +246,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     }
 
     override fun clearContractList() {
-        packageServiceContractListList.clear()
+        packageServiceContractList.clear()
     }
 
     override fun updateTitle(user: FirebaseUser) {
@@ -282,7 +282,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     private fun configRemoteConfig() {
         val remoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 5
+            minimumFetchIntervalInSeconds = 10
         }
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)

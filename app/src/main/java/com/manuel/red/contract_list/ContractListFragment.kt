@@ -51,10 +51,10 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
     }
 
     private fun setupRecyclerView() {
-        binding?.let { fragmentContractListBinding ->
+        binding?.let { view ->
             packageServiceContractListAdapter =
                 PackageServiceContractListAdapter(mutableListOf(), this)
-            fragmentContractListBinding.recyclerView.apply {
+            view.recyclerView.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = this@ContractListFragment.packageServiceContractListAdapter
             }
@@ -62,11 +62,11 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
     }
 
     private fun setupButtons() {
-        binding?.let { fragmentContractListBinding ->
-            fragmentContractListBinding.ibCancel.setOnClickListener {
+        binding?.let { view ->
+            view.ibCancel.setOnClickListener {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
-            fragmentContractListBinding.efab.setOnClickListener {
+            view.efab.setOnClickListener {
                 requestContractTransaction()
             }
         }
@@ -126,21 +126,21 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
                 ).show()
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.ADD_PAYMENT_INFO) {
                     val services = mutableListOf<Bundle>()
-                    contract.packagesServices.forEach {
-                        if (it.value.available > 5) {
+                    contract.packagesServices.forEach { entry ->
+                        if (entry.value.available >= 3) {
                             val bundle = Bundle()
-                            bundle.putString("id_package_service", it.key)
+                            bundle.putString("id_package_service", entry.key)
                             services.add(bundle)
                         }
                     }
                     param(FirebaseAnalytics.Param.QUANTITY, services.toTypedArray())
                 }
                 firebaseAnalytics.setUserProperty(
-                    Constants.USER_PROP_AVAILABLE,
+                    Constants.USER_PROP_DISCOUNT,
                     if (packageServices.size > 0) {
-                        "con_mayoreo"
+                        "with_discount"
                     } else {
-                        "sin_mayoreo"
+                        "without_discount"
                     }
                 )
             }.addOnFailureListener {
@@ -156,9 +156,9 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
     }
 
     private fun enableUI(enable: Boolean) {
-        binding?.let { fragmentContractListBinding ->
-            fragmentContractListBinding.ibCancel.isEnabled = enable
-            fragmentContractListBinding.efab.isEnabled = enable
+        binding?.let { view ->
+            view.ibCancel.isEnabled = enable
+            view.efab.isEnabled = enable
         }
     }
 
@@ -174,8 +174,8 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
 
     override fun showTotal(total: Int) {
         totalPrice = total
-        binding?.let { fragmentContractListBinding ->
-            fragmentContractListBinding.tvTotal.text =
+        binding?.let { view ->
+            view.tvTotal.text =
                 getString(R.string.package_service_full_contract_list, total)
         }
     }
