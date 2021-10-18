@@ -38,19 +38,24 @@
         tools:text="Subiendo... 50%" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilFullName"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_width="@dimen/login_button_width"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/common_padding_min"
         android:layout_marginBottom="@dimen/common_padding_min"
         android:hint="@string/name"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
         app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etFullName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName" />
+            android:digits="abcdefghijklmnñopqrstuvwxyzABCDEFGHIJKLMNÑOPQRSTUVWXYZáéíóú "
+            android:inputType="textPersonName"
+            android:maxLength="30" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton

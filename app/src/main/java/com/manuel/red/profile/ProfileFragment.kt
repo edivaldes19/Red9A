@@ -133,20 +133,28 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateUserProfile(binding: FragmentProfileBinding, user: FirebaseUser, uri: Uri) {
-        val profileUpdated = UserProfileChangeRequest.Builder()
-            .setDisplayName(binding.etFullName.text.toString().trim()).setPhotoUri(uri).build()
-        user.updateProfile(profileUpdated).addOnSuccessListener {
-            Toast.makeText(
-                activity,
-                getString(R.string.edited_profile_successfully),
-                Toast.LENGTH_SHORT
-            ).show()
-            (activity as? MainAux)?.updateTitle(user)
-            activity?.onBackPressed()
-        }.addOnFailureListener {
-            errorSnack.apply {
-                setText(getString(R.string.error_editing_profile))
-                show()
+        if (binding.etFullName.text.isNullOrEmpty()) {
+            binding.tilFullName.run {
+                error = getString(R.string.this_field_is_required)
+                requestFocus()
+            }
+        } else {
+            binding.tilFullName.error = null
+            val profileUpdated = UserProfileChangeRequest.Builder()
+                .setDisplayName(binding.etFullName.text.toString().trim()).setPhotoUri(uri).build()
+            user.updateProfile(profileUpdated).addOnSuccessListener {
+                Toast.makeText(
+                    activity,
+                    getString(R.string.edited_profile_successfully),
+                    Toast.LENGTH_SHORT
+                ).show()
+                (activity as? MainAux)?.updateTitle(user)
+                activity?.onBackPressed()
+            }.addOnFailureListener {
+                errorSnack.apply {
+                    setText(getString(R.string.error_editing_profile))
+                    show()
+                }
             }
         }
     }
