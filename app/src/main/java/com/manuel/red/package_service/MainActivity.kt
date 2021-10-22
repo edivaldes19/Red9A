@@ -140,9 +140,9 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
                 preferences.edit {
                     putString(Constants.PROP_TOKEN, token).apply()
                 }
-                Log.i("Get token", token.toString())
+                Log.i("Token obtained", token.toString())
             } else {
-                Log.i("Get token fail", task.exception.toString())
+                Log.i("Token not obtained", task.exception.toString())
             }
         }
     }
@@ -308,16 +308,18 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val isPromoDay = remoteConfig.getBoolean(Constants.PROP_IS_OFFER_AND_PROMO_DAY)
-                val promCounter = remoteConfig.getLong(Constants.PROP_OFFER_AND_PROMO_COUNTER)
-                if (isPromoDay) {
+                val isOfferAndPromotionDay =
+                    remoteConfig.getBoolean(Constants.PROP_IS_OFFER_AND_PROMO_DAY)
+                val offerAndPromotionCounter =
+                    remoteConfig.getLong(Constants.PROP_OFFER_AND_PROMO_COUNTER)
+                if (isOfferAndPromotionDay) {
                     val badge = BadgeDrawable.create(this)
                     BadgeUtils.attachBadgeDrawable(
                         badge,
                         binding.toolbar,
                         R.id.action_offers_and_promotions
                     )
-                    badge.number = promCounter.toInt()
+                    badge.number = offerAndPromotionCounter.toInt()
                 }
             }
         }

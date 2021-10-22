@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.manuel.red.R
 import com.manuel.red.databinding.ItemRequestedContractBinding
@@ -31,6 +32,7 @@ class RequestedContractAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.binding.root.animation = AnimationUtils.loadAnimation(context, R.anim.slide)
         val contract = requestedContractList[position]
         holder.setListener(contract)
         holder.binding.tvId.text = context.getString(R.string.contract_id, contract.id)
