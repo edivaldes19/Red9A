@@ -149,6 +149,12 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
                     getString(R.string.error_requesting_contracts),
                     Snackbar.LENGTH_SHORT
                 ).show()
+                //
+                Toast.makeText(
+                    activity,
+                    it.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
             }.addOnCompleteListener {
                 enableUI(true)
             }

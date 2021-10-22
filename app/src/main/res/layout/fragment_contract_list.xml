@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="100"
                 android:text="@string/contract_list"
-                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:textColor="?attr/colorOnPrimary" />
 
             <ImageButton
@@ -62,7 +62,7 @@
             android:layout_marginHorizontal="@dimen/common_padding_default"
             android:layout_marginBottom="@dimen/common_padding_default"
             android:textAlignment="textEnd"
-            android:textAppearance="?attr/textAppearanceHeadline5"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
             app:layout_constraintBottom_toTopOf="@id/efab"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

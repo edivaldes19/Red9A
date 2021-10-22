@@ -81,7 +81,7 @@
     <string name="requested_contract_id">ID de Contrato: %1$s</string>
     <string name="package_service_full_contract_list">Precio total: $%1$d MXN</string>
     <string name="my_profile">Mi perfil</string>
-    <string name="main_topic">new_offer</string>
+    <string name="main_topic">new_offer_and_promotion</string>
     <string name="notifications_activated">Notificaciones activadas.</string>
     <string name="notifications_disabled">Notificaciones desactivadas.</string>
     <string name="requested_contracts_successfully">Contrato(s) solicitados exitosamente.</string>
@@ -97,7 +97,8 @@
     <string name="facebook_login_protocol_scheme" translatable="false">fb278337960816104</string>
     <string name="months">meses</string>
     <string name="edited_profile_successfully">Perfil editado exitosamente.</string>
-    <string name="error_editing_profile">Error al editar el perfil.</string>
+    <string name="error_editing_profile_with_firebase_ui">Error al editar el perfil con Firebase AuthUI</string>
+    <string name="error_editing_profile_with_firebase_firestore">Error al editar el perfil con Firebase Firestore</string>
     <string name="this_field_is_required">Este campo es obligatorio.</string>
     <string name="discount_from">Descuento del</string>
 </resources>

@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Base64
 import android.util.Log
 import android.view.Menu
@@ -27,6 +28,7 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Timestamp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -51,6 +53,7 @@ import com.manuel.red.settings.SettingsActivity
 import com.manuel.red.utils.ConnectionReceiver
 import com.manuel.red.utils.Constants
 import java.security.MessageDigest
+import java.util.*
 
 class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     ConnectionReceiver.ReceiverListener {
@@ -79,14 +82,19 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
                     val preferences = PreferenceManager.getDefaultSharedPreferences(this)
                     val token = preferences.getString(Constants.PROP_TOKEN, null)
                     token?.let {
-                        val db = FirebaseFirestore.getInstance()
                         val tokenMap = hashMapOf(Pair(Constants.PROP_TOKEN, token))
-                        db.collection(Constants.COLL_USERS).document(user.uid)
-                            .collection(Constants.COLL_TOKENS).add(tokenMap).addOnSuccessListener {
-                                Log.i("Registered token", token)
-                            }.addOnFailureListener {
-                                Log.i("No registered token", token)
-                            }
+                        val userMap = hashMapOf(
+                            Constants.PROP_DATE to Timestamp(Date()),
+                            Constants.PROP_USERNAME to user.displayName.toString(),
+                            Constants.PROP_PROFILE_PICTURE to user.photoUrl.toString()
+                        )
+                        val db = FirebaseFirestore.getInstance()
+                        db.collection(Constants.COLL_USERS).document(user.uid).run {
+                            set(userMap)
+                            collection(Constants.COLL_TOKENS).add(tokenMap)
+                                .addOnSuccessListener { Log.i("Registered Token", token) }
+                                .addOnFailureListener { Log.i("Unregistered Token", token) }
+                        }
                     }
                 }
             } else {
@@ -254,7 +262,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     }
 
     override fun onNetworkChange(isConnected: Boolean) {
-        showNetworkErrorSnack(isConnected)
+        showNetworkErrorToast(isConnected)
     }
 
     private fun checkConnection() {
@@ -266,15 +274,17 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
             applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = manager.activeNetworkInfo
         val isConnected = networkInfo != null && networkInfo.isConnectedOrConnecting
-        showNetworkErrorSnack(isConnected)
+        showNetworkErrorToast(isConnected)
     }
 
-    private fun showNetworkErrorSnack(connected: Boolean) {
+    private fun showNetworkErrorToast(connected: Boolean) {
         if (!connected) {
-            errorSnack.apply {
-                setText(getString(R.string.network_error_check_your_connection))
-                show()
-            }
+            Toast.makeText(
+                this,
+                getString(R.string.network_error_check_your_connection),
+                Toast.LENGTH_LONG
+            ).show()
+            startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
         }
     }
 
@@ -288,8 +298,8 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val isPromoDay = remoteConfig.getBoolean("isOfferAndPromoDay")
-                val promCounter = remoteConfig.getLong("offerAndPromoCounter")
+                val isPromoDay = remoteConfig.getBoolean(Constants.PROP_IS_OFFER_AND_PROMO_DAY)
+                val promCounter = remoteConfig.getLong(Constants.PROP_OFFER_AND_PROMO_COUNTER)
                 if (isPromoDay) {
                     val badge = BadgeDrawable.create(this)
                     BadgeUtils.attachBadgeDrawable(
@@ -335,7 +345,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 val info = packageManager.getPackageInfo(
-                    Constants.PACKAGE_NAME,
+                    packageName,
                     PackageManager.GET_SIGNING_CERTIFICATES
                 )
                 for (signature in info.signingInfo.apkContentsSigners) {
@@ -344,10 +354,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
                     Log.d("API >= 28 KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT))
                 }
             } else {
-                val info = packageManager.getPackageInfo(
-                    Constants.PACKAGE_NAME,
-                    PackageManager.GET_SIGNATURES
-                )
+                val info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES)
                 for (signature in info.signatures) {
                     val md = MessageDigest.getInstance("SHA")
                     md.update(signature.toByteArray())

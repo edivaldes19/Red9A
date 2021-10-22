@@ -20,7 +20,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_offers_and_promotions"
-        android:icon="@drawable/ic_local_offer"
+        android:icon="@drawable/ic_store"
         android:title=""
         app:showAsAction="ifRoom" />
 </menu>

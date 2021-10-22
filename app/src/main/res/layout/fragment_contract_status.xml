@@ -42,7 +42,7 @@
         android:background="@drawable/background_check_box"
         android:buttonTint="?colorSecondaryVariant"
         android:text="@string/contract_status_on_hold"
-        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintEnd_toEndOf="@id/clProgress"
         app:layout_constraintStart_toStartOf="@id/clProgress"
         app:layout_constraintTop_toTopOf="@id/clProgress" />
@@ -54,7 +54,7 @@
         android:background="@drawable/background_check_box"
         android:buttonTint="?colorSecondaryVariant"
         android:text="@string/contract_status_activated"
-        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintBottom_toTopOf="@id/cbTimedOut"
         app:layout_constraintEnd_toEndOf="@id/clProgress"
         app:layout_constraintStart_toStartOf="@id/clProgress"
@@ -67,7 +67,7 @@
         android:background="@drawable/background_check_box"
         android:buttonTint="?colorSecondaryVariant"
         android:text="@string/contract_status_timed_out"
-        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintBottom_toBottomOf="@id/clProgress"
         app:layout_constraintEnd_toEndOf="@id/clProgress"
         app:layout_constraintStart_toStartOf="@id/clProgress" />

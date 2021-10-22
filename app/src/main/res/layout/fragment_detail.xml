@@ -25,7 +25,7 @@
         android:layout_marginHorizontal="@dimen/common_padding_default"
         android:layout_marginTop="@dimen/common_padding_default"
         android:textAlignment="textStart"
-        android:textAppearance="?attr/textAppearanceHeadline3"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@id/nsvDetailsPackageService"
         app:layout_constraintEnd_toEndOf="parent"
@@ -98,7 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/common_padding_default"
         android:text="@string/detail_available"
-        android:textAppearance="?attr/textAppearanceSubtitle1"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintBottom_toTopOf="@id/fabSub"
         app:layout_constraintEnd_toEndOf="@id/tvName"
         app:layout_constraintStart_toStartOf="@id/tvName" />
@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_padding_default"
         android:text="@string/detail_total_price"
-        android:textAppearance="?attr/textAppearanceSubtitle2"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
         app:layout_constraintBottom_toBottomOf="@id/fabSub"
         app:layout_constraintEnd_toEndOf="@id/tvName"
         app:layout_constraintStart_toEndOf="@id/fabSum"
@@ -138,7 +138,7 @@
                 android:layout_marginTop="@dimen/common_padding_default"
                 android:layout_marginBottom="@dimen/common_padding_default"
                 android:textAlignment="textStart"
-                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 tools:text="Descripción" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -148,7 +148,7 @@
                 android:layout_marginTop="@dimen/common_padding_default"
                 android:layout_marginBottom="@dimen/common_padding_default"
                 android:textAlignment="textStart"
-                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 tools:text="Precio" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -158,7 +158,7 @@
                 android:layout_marginTop="@dimen/common_padding_default"
                 android:layout_marginBottom="@dimen/common_padding_default"
                 android:textAlignment="textStart"
-                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 tools:text="Velocidad" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -168,7 +168,7 @@
                 android:layout_marginTop="@dimen/common_padding_default"
                 android:layout_marginBottom="@dimen/common_padding_default"
                 android:textAlignment="textStart"
-                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 tools:text="Límite" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -178,7 +178,7 @@
                 android:layout_marginTop="@dimen/common_padding_default"
                 android:layout_marginBottom="@dimen/common_padding_default"
                 android:textAlignment="textStart"
-                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 tools:text="Vigencia" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

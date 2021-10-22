@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/welcome"
                 android:textAlignment="center"
-                android:textAppearance="?attr/textAppearanceHeadline6"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                 android:textColor="@color/blue_700" />
         </LinearLayout>
 
@@ -154,7 +154,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/common_padding_min"
-                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
                 tools:text="Términos y condiciones" />
         </LinearLayout>
     </LinearLayout>

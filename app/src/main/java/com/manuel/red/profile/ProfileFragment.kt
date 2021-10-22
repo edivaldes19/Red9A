@@ -24,6 +24,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.manuel.red.R
 import com.manuel.red.databinding.FragmentProfileBinding
@@ -143,16 +144,29 @@ class ProfileFragment : Fragment() {
             val profileUpdated = UserProfileChangeRequest.Builder()
                 .setDisplayName(binding.etFullName.text.toString().trim()).setPhotoUri(uri).build()
             user.updateProfile(profileUpdated).addOnSuccessListener {
-                Toast.makeText(
-                    activity,
-                    getString(R.string.edited_profile_successfully),
-                    Toast.LENGTH_SHORT
-                ).show()
-                (activity as? MainAux)?.updateTitle(user)
-                activity?.onBackPressed()
+                val userMap = hashMapOf<String, Any>(
+                    Constants.PROP_USERNAME to user.displayName.toString(),
+                    Constants.PROP_PROFILE_PICTURE to user.photoUrl.toString()
+                )
+                val db = FirebaseFirestore.getInstance()
+                db.collection(Constants.COLL_USERS).document(user.uid).update(userMap)
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            activity,
+                            getString(R.string.edited_profile_successfully),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        (activity as? MainAux)?.updateTitle(user)
+                        activity?.onBackPressed()
+                    }.addOnFailureListener {
+                        errorSnack.apply {
+                            setText(getString(R.string.error_editing_profile_with_firebase_firestore))
+                            show()
+                        }
+                    }
             }.addOnFailureListener {
                 errorSnack.apply {
-                    setText(getString(R.string.error_editing_profile))
+                    setText(getString(R.string.error_editing_profile_with_firebase_ui))
                     show()
                 }
             }

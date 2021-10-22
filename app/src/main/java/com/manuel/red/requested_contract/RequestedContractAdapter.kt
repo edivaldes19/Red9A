@@ -9,6 +9,7 @@ import com.manuel.red.R
 import com.manuel.red.databinding.ItemRequestedContractBinding
 import com.manuel.red.models.RequestedContract
 import com.manuel.red.utils.TimestampToText
+import java.util.*
 
 class RequestedContractAdapter(
     private val requestedContractList: MutableList<RequestedContract>,
@@ -35,7 +36,7 @@ class RequestedContractAdapter(
         holder.binding.tvId.text = context.getString(R.string.contract_id, contract.id)
         var names = ""
         contract.packagesServices.forEach { entry ->
-            names += "${entry.value.name}, "
+            names += "${entry.value.name}(${entry.value.available}), "
         }
         holder.binding.tvPackageServiceNames.text = names.dropLast(2)
         holder.binding.tvTotalPrice.text =
@@ -46,7 +47,8 @@ class RequestedContractAdapter(
         } else {
             context.getString(R.string.unknown)
         }
-        holder.binding.tvStatus.text = context.getString(R.string.order_status, statusStr)
+        holder.binding.tvStatus.text =
+            context.getString(R.string.order_status, statusStr.lowercase(Locale.getDefault()))
         val time = TimestampToText.getTimeAgo(contract.timestamp)
         holder.binding.tvDate.text = time
     }

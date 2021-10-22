@@ -15,6 +15,7 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.manuel.red.R
 import com.manuel.red.databinding.FragmentOffersAndPromotionsBinding
 import com.manuel.red.package_service.MainAux
+import com.manuel.red.utils.Constants
 
 class OffersAndPromotionsFragment : Fragment() {
     private var binding: FragmentOffersAndPromotionsBinding? = null
@@ -52,14 +53,14 @@ class OffersAndPromotionsFragment : Fragment() {
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val percentage = remoteConfig.getLong("percentage")
-                val imagePath = remoteConfig.getString("imagePath")
-                val message = remoteConfig.getString("message")
+                val percentage = remoteConfig.getLong(Constants.PROP_PERCENTAGE)
+                val imagePath = remoteConfig.getString(Constants.PROP_IMAGE_PATH)
+                val message = remoteConfig.getString(Constants.PROP_MESSAGE)
                 binding?.let { view ->
                     view.tvMessage.text = message
                     view.tvPercentage.text = "${getString(R.string.discount_from)} $percentage%"
                     Glide.with(this).load(imagePath).diskCacheStrategy(DiskCacheStrategy.NONE)
-                        .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_local_offer)
+                        .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_store)
                         .centerCrop().into(view.imgOffersAndPromotions)
                 }
             }
