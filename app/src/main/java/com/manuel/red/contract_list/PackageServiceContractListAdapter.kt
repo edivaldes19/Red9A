@@ -28,14 +28,9 @@ class PackageServiceContractListAdapter(
         holder.setListener(packageService)
         holder.binding.tvName.text = packageService.name
         holder.binding.tvAmount.text = packageService.newAvailable.toString()
-        Glide.with(context)
-            .load(packageService.imagePath)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .placeholder(R.drawable.ic_cloud_download)
-            .error(R.drawable.ic_error_outline)
-            .centerCrop()
-            .circleCrop()
-            .into(holder.binding.imgPackageService)
+        Glide.with(context).load(packageService.imagePath).diskCacheStrategy(DiskCacheStrategy.ALL)
+            .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_error_outline)
+            .centerCrop().circleCrop().into(holder.binding.imgPackageService)
     }
 
     override fun getItemCount(): Int = packageServiceList.size
@@ -58,15 +53,6 @@ class PackageServiceContractListAdapter(
         }
     }
 
-    fun delete(packageService: PackageService) {
-        val index = packageServiceList.indexOf(packageService)
-        if (index != -1) {
-            packageServiceList.removeAt(index)
-            notifyItemRemoved(index)
-            calcTotal()
-        }
-    }
-
     private fun calcTotal() {
         var result = 0
         for (packageService in packageServiceList) {
@@ -79,13 +65,17 @@ class PackageServiceContractListAdapter(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ItemPackageServiceContractListBinding.bind(view)
         fun setListener(packageService: PackageService) {
-            binding.fabSum.setOnClickListener {
-                packageService.newAvailable += 1
-                listener.setAmount(packageService)
-            }
             binding.fabSub.setOnClickListener {
-                packageService.newAvailable -= 1
-                listener.setAmount(packageService)
+                if (packageService.newAvailable > 1) {
+                    packageService.newAvailable -= 1
+                    listener.setAmount(packageService)
+                }
+            }
+            binding.fabSum.setOnClickListener {
+                if (packageService.newAvailable < packageService.available) {
+                    packageService.newAvailable += 1
+                    listener.setAmount(packageService)
+                }
             }
         }
     }

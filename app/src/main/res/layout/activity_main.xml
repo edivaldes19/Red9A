@@ -43,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/common_padding_min"
             android:layout_marginEnd="@dimen/common_padding_default"
+            android:enabled="false"
             android:text="@string/package_service_view_contract_list"
             android:textAllCaps="false"
             app:cornerRadius="@dimen/common_padding_max"
@@ -50,7 +51,8 @@
             app:iconTint="@color/white"
             app:layout_constraintBottom_toBottomOf="@id/tvTotal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvTotal" />
+            app:layout_constraintTop_toTopOf="@id/tvTotal"
+            tools:enabled="true" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/nsvPackageServices"

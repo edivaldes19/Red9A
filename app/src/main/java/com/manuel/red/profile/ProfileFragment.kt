@@ -11,12 +11,10 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -69,25 +67,10 @@ class ProfileFragment : Fragment() {
         configButtons()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            activity?.onBackPressed()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onDestroyView() {
         (activity as? MainAux)?.showButton(true)
         super.onDestroyView()
         binding = null
-    }
-
-    override fun onDestroy() {
-        (activity as? AppCompatActivity)?.let {
-            it.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            setHasOptionsMenu(false)
-        }
-        super.onDestroy()
     }
 
     private fun getUser() {
@@ -97,16 +80,7 @@ class ProfileFragment : Fragment() {
                 Glide.with(this).load(user.photoUrl).diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_error_outline)
                     .centerCrop().circleCrop().into(binding.imgProfile)
-                setupActionBar()
             }
-        }
-    }
-
-    private fun setupActionBar() {
-        (activity as? AppCompatActivity)?.let { appCompatActivity ->
-            appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            appCompatActivity.supportActionBar?.title = getString(R.string.my_profile)
-            setHasOptionsMenu(true)
         }
     }
 

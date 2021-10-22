@@ -59,10 +59,9 @@ class ChatFragment : Fragment(), OnChatListener {
     }
 
     override fun onDestroy() {
-        (activity as? AppCompatActivity)?.let { appCompatActivity ->
-            appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            appCompatActivity.supportActionBar?.title = getString(R.string.my_contracts)
-            setHasOptionsMenu(false)
+        (activity as? AppCompatActivity)?.let { activity ->
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            activity.supportActionBar?.title = getString(R.string.my_contracts)
         }
         super.onDestroy()
     }
@@ -97,6 +96,13 @@ class ChatFragment : Fragment(), OnChatListener {
         requestedContract?.let {
             setupActionBar()
             setupRealtimeDatabase()
+        }
+    }
+
+    private fun setupActionBar() {
+        (activity as? AppCompatActivity)?.let { activity ->
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            activity.supportActionBar?.title = getString(R.string.technical_support)
         }
     }
 
@@ -198,14 +204,6 @@ class ChatFragment : Fragment(), OnChatListener {
                     }
                 }
             }
-        }
-    }
-
-    private fun setupActionBar() {
-        (activity as? AppCompatActivity)?.let { appCompatActivity ->
-            appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            appCompatActivity.supportActionBar?.title = getString(R.string.technical_support)
-            setHasOptionsMenu(true)
         }
     }
 }

@@ -36,10 +36,10 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = FragmentContractListBinding.inflate(LayoutInflater.from(activity))
-        binding?.let {
+        binding?.let { view ->
             val bottomSheetDialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
-            bottomSheetDialog.setContentView(it.root)
-            bottomSheetBehavior = BottomSheetBehavior.from(it.root.parent as View)
+            bottomSheetDialog.setContentView(view.root)
+            bottomSheetBehavior = BottomSheetBehavior.from(view.root.parent as View)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             setupRecyclerView()
             setupButtons()
@@ -73,8 +73,8 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
     }
 
     private fun getPackageServices() {
-        (activity as? MainAux)?.getPackagesServicesContractList()?.forEach {
-            packageServiceContractListAdapter.add(it)
+        (activity as? MainAux)?.getPackagesServicesContractList()?.forEach { packageService ->
+            packageServiceContractListAdapter.add(packageService)
         }
     }
 
@@ -148,12 +148,6 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
                     binding!!.root,
                     getString(R.string.error_requesting_contracts),
                     Snackbar.LENGTH_SHORT
-                ).show()
-                //
-                Toast.makeText(
-                    activity,
-                    it.toString(),
-                    Toast.LENGTH_SHORT
                 ).show()
             }.addOnCompleteListener {
                 enableUI(true)

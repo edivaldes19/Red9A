@@ -101,4 +101,5 @@
     <string name="error_editing_profile_with_firebase_firestore">Error al editar el perfil con Firebase Firestore</string>
     <string name="this_field_is_required">Este campo es obligatorio.</string>
     <string name="discount_from">Descuento del</string>
+    <string name="yes">Sí</string>
 </resources>

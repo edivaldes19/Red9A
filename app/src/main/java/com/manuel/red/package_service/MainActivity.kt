@@ -27,6 +27,7 @@ import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -166,26 +167,33 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_sign_off -> {
-                AuthUI.getInstance().signOut(this).addOnSuccessListener {
-                    Toast.makeText(
-                        this,
-                        getString(R.string.you_have_logged_out),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        binding.nsvPackageServices.visibility = View.GONE
-                        binding.llProgress.visibility = View.VISIBLE
-                    } else {
-                        errorSnack.apply {
-                            setText(getString(R.string.failed_to_log_out))
-                            show()
+                MaterialAlertDialogBuilder(this).setTitle(getString(R.string.sign_off))
+                    .setMessage(getString(R.string.are_you_sure_to_take_this_action))
+                    .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        AuthUI.getInstance().signOut(this).addOnSuccessListener {
+                            Toast.makeText(
+                                this,
+                                getString(R.string.you_have_logged_out),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                binding.nsvPackageServices.visibility = View.GONE
+                                binding.llProgress.visibility = View.VISIBLE
+                            } else {
+                                errorSnack.apply {
+                                    setText(getString(R.string.failed_to_log_out))
+                                    show()
+                                }
+                            }
                         }
-                    }
-                }
+                    }.setNegativeButton(getString(R.string.cancel), null).show()
             }
             R.id.action_requested_contract_history -> startActivity(
-                Intent(this, RequestedContractActivity::class.java)
+                Intent(
+                    this,
+                    RequestedContractActivity::class.java
+                )
             )
             R.id.action_profile -> {
                 val fragment = ProfileFragment()
@@ -248,8 +256,10 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         }
         if (total == 0) {
             binding.tvTotal.text = getString(R.string.empty_list)
+            binding.btnViewContractList.isEnabled = false
         } else {
             binding.tvTotal.text = getString(R.string.package_service_full_contract_list, total)
+            binding.btnViewContractList.isEnabled = true
         }
     }
 

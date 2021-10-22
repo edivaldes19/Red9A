@@ -50,8 +50,8 @@ class RequestedContractActivity : AppCompatActivity(), OnRequestedContractListen
 
     override fun getRequestedContractSelected(): RequestedContract = requestedContractSelected
     private fun checkIntent(intent: Intent?) {
-        intent?.let {
-            val actionIntent = it.getIntExtra(Constants.ACTION_INTENT, 0)
+        intent?.let { intent1 ->
+            val actionIntent = intent1.getIntExtra(Constants.ACTION_INTENT, 0)
             if (actionIntent == 1) {
                 val id = intent.getStringExtra(Constants.PROP_ID) ?: ""
                 val status = intent.getIntExtra(Constants.PROP_STATUS, 0)
