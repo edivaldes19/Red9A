@@ -28,13 +28,15 @@ import com.manuel.red.R
 import com.manuel.red.databinding.FragmentProfileBinding
 import com.manuel.red.package_service.MainAux
 import com.manuel.red.utils.Constants
+import com.manuel.red.utils.TimestampToText
 import java.io.ByteArrayOutputStream
+import java.util.*
 
 class ProfileFragment : Fragment() {
     private var binding: FragmentProfileBinding? = null
     private var photoSelectedUri: Uri? = null
     private val errorSnack: Snackbar by lazy {
-        Snackbar.make(binding!!.root, "", Snackbar.LENGTH_SHORT).setTextColor(Color.RED)
+        Snackbar.make(binding!!.root, "", Snackbar.LENGTH_SHORT).setTextColor(Color.YELLOW)
     }
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
@@ -73,9 +75,28 @@ class ProfileFragment : Fragment() {
         binding = null
     }
 
+    @SuppressLint("SetTextI18n")
     private fun getUser() {
         binding?.let { binding ->
             FirebaseAuth.getInstance().currentUser?.let { user ->
+                val db = FirebaseFirestore.getInstance()
+                val docRef = db.collection(Constants.COLL_USERS).document(user.uid)
+                docRef.get().addOnSuccessListener { document ->
+                    if (document != null) {
+                        binding.tvLastModification.text =
+                            "${getString(R.string.last_modification)}: ${
+                                TimestampToText.getTimeAgo(document.getLong(Constants.PROP_LAST_MODIFICATION)!!)
+                                    .lowercase(Locale.getDefault())
+                            }."
+                    }
+                }.addOnFailureListener {
+                    errorSnack.apply {
+                        setText(getString(R.string.failed_to_get_the_last_modification))
+                        show()
+                    }
+                }
+                binding.tvSubscriberNumber.text =
+                    "${getString(R.string.subscriber_number)}: ${user.uid}"
                 binding.etFullName.setText(user.displayName)
                 Glide.with(this).load(user.photoUrl).diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_error_outline)
@@ -119,6 +140,7 @@ class ProfileFragment : Fragment() {
                 .setDisplayName(binding.etFullName.text.toString().trim()).setPhotoUri(uri).build()
             user.updateProfile(profileUpdated).addOnSuccessListener {
                 val userMap = hashMapOf<String, Any>(
+                    Constants.PROP_LAST_MODIFICATION to Date().time,
                     Constants.PROP_USERNAME to user.displayName.toString(),
                     Constants.PROP_PROFILE_PICTURE to user.photoUrl.toString()
                 )

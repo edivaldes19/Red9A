@@ -18,6 +18,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
@@ -29,7 +30,6 @@ import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.badge.BadgeUtils
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.Timestamp
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -64,10 +64,11 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     private lateinit var packageServiceAdapter: PackageServiceAdapter
     private lateinit var listenerRegistration: ListenerRegistration
     private var packageServiceSelected: PackageService? = null
-    private val packageServiceContractList = mutableListOf<PackageService>()
+    private val packageServiceContractList: MutableList<PackageService> = mutableListOf()
+    private var packageServiceList: MutableList<PackageService> = mutableListOf()
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private val errorSnack: Snackbar by lazy {
-        Snackbar.make(binding.root, "", Snackbar.LENGTH_SHORT).setTextColor(Color.RED)
+        Snackbar.make(binding.root, "", Snackbar.LENGTH_SHORT).setTextColor(Color.YELLOW)
     }
     private val resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { activityResult ->
@@ -85,7 +86,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
                     token?.let {
                         val tokenMap = hashMapOf(Pair(Constants.PROP_TOKEN, token))
                         val userMap = hashMapOf(
-                            Constants.PROP_DATE to Timestamp(Date()),
+                            Constants.PROP_LAST_MODIFICATION to Date().time,
                             Constants.PROP_USERNAME to user.displayName.toString(),
                             Constants.PROP_PROFILE_PICTURE to user.photoUrl.toString()
                         )
@@ -161,6 +162,30 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        val menuItem = menu?.findItem(R.id.action_search)
+        val searchView = menuItem?.actionView as SearchView
+        searchView.queryHint = getString(R.string.write_here_to_search)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                val temporaryList: MutableList<PackageService> = ArrayList()
+                for (packageService in packageServiceList) {
+                    if (newText!! in packageService.name.toString()) {
+                        temporaryList.add(packageService)
+                    }
+                }
+                packageServiceAdapter.updateList(temporaryList)
+                if (temporaryList.isNullOrEmpty()) {
+                    binding.tvWithoutResults.visibility = View.VISIBLE
+                } else {
+                    binding.tvWithoutResults.visibility = View.GONE
+                }
+                return false
+            }
+        })
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -379,7 +404,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     }
 
     private fun configRecyclerView() {
-        packageServiceAdapter = PackageServiceAdapter(mutableListOf(), this)
+        packageServiceAdapter = PackageServiceAdapter(packageServiceList, this)
         binding.recyclerView.apply {
             layoutManager =
                 GridLayoutManager(this@MainActivity, 2, GridLayoutManager.HORIZONTAL, false)
@@ -416,15 +441,9 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
                 val packageService = snapshot.document.toObject(PackageService::class.java)
                 packageService.id = snapshot.document.id
                 when (snapshot.type) {
-                    DocumentChange.Type.ADDED -> {
-                        packageServiceAdapter.add(packageService)
-                    }
-                    DocumentChange.Type.MODIFIED -> {
-                        packageServiceAdapter.update(packageService)
-                    }
-                    DocumentChange.Type.REMOVED -> {
-                        packageServiceAdapter.delete(packageService)
-                    }
+                    DocumentChange.Type.ADDED -> packageServiceAdapter.add(packageService)
+                    DocumentChange.Type.MODIFIED -> packageServiceAdapter.update(packageService)
+                    DocumentChange.Type.REMOVED -> packageServiceAdapter.delete(packageService)
                 }
             }
         }

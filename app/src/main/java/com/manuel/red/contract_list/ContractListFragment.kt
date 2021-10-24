@@ -97,19 +97,19 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
                     packageService.newAvailable
                 )
             }
-            val contract = RequestedContract(
+            val requestedContract = RequestedContract(
                 userId = myUser.uid,
                 packagesServices = packageServices,
                 totalPrice = totalPrice,
                 status = 1,
-                timestamp = Date().time
+                requested = Date().time
             )
             val db = FirebaseFirestore.getInstance()
             val requestDoc = db.collection(Constants.COLL_CONTRACTS_REQUESTED).document()
             val packageServicesRef = db.collection(Constants.COLL_PACKAGE_SERVICE)
             db.runBatch { batch ->
-                batch.set(requestDoc, contract)
-                contract.packagesServices.forEach { entry ->
+                batch.set(requestDoc, requestedContract)
+                requestedContract.packagesServices.forEach { entry ->
                     batch.update(
                         packageServicesRef.document(entry.key), Constants.PROP_AVAILABLE,
                         FieldValue.increment(-entry.value.available.toLong())
@@ -126,7 +126,7 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
                 ).show()
                 firebaseAnalytics.logEvent(FirebaseAnalytics.Event.ADD_PAYMENT_INFO) {
                     val services = mutableListOf<Bundle>()
-                    contract.packagesServices.forEach { entry ->
+                    requestedContract.packagesServices.forEach { entry ->
                         if (entry.value.available >= 3) {
                             val bundle = Bundle()
                             bundle.putString("id_package_service", entry.key)

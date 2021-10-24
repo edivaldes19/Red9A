@@ -1,5 +1,6 @@
 package com.manuel.red.requested_contract
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +14,7 @@ import com.manuel.red.utils.TimestampToText
 import java.util.*
 
 class RequestedContractAdapter(
-    private val requestedContractList: MutableList<RequestedContract>,
+    private var requestedContractList: MutableList<RequestedContract>,
     private val listener: OnRequestedContractListener
 ) : RecyclerView.Adapter<RequestedContractAdapter.ViewHolder>() {
     private lateinit var context: Context
@@ -51,14 +52,30 @@ class RequestedContractAdapter(
         }
         holder.binding.tvStatus.text =
             context.getString(R.string.order_status, statusStr.lowercase(Locale.getDefault()))
-        val time = TimestampToText.getTimeAgo(contract.timestamp)
+        val time = TimestampToText.getTimeAgo(contract.requested)
         holder.binding.tvDate.text = time
     }
 
     override fun getItemCount(): Int = requestedContractList.size
     fun add(requestedContract: RequestedContract) {
-        requestedContractList.add(requestedContract)
-        notifyItemInserted(requestedContractList.size - 1)
+        if (!requestedContractList.contains(requestedContract)) {
+            requestedContractList.add(requestedContract)
+            notifyItemInserted(requestedContractList.size - 1)
+        }
+    }
+
+    fun delete(requestedContract: RequestedContract) {
+        val index = requestedContractList.indexOf(requestedContract)
+        if (index != -1) {
+            requestedContractList.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateList(list: MutableList<RequestedContract>) {
+        requestedContractList = list
+        notifyDataSetChanged()
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -69,6 +86,9 @@ class RequestedContractAdapter(
             }
             binding.chpChat.setOnClickListener {
                 listener.onStartChat(requestedContract)
+            }
+            binding.imgDelete.setOnClickListener {
+                listener.onDeleteRequestedContract(requestedContract)
             }
         }
     }

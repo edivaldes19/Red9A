@@ -21,6 +21,8 @@ object Constants {
     const val PROP_PERCENTAGE = "percentage"
     const val PROP_IMAGE_PATH = "imagePath"
     const val PROP_MESSAGE = "message"
+    const val PROP_LAST_MODIFICATION = "lastModification"
+    const val PROP_REQUESTED = "requested"
     const val ACTION_INTENT = "action_intent"
     const val USER_PROP_DISCOUNT = "discount_package_service"
     const val PATH_PACKAGE_SERVICE_IMAGES = "package_service_images"

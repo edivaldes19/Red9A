@@ -67,14 +67,24 @@ class PackageServiceContractListAdapter(
         fun setListener(packageService: PackageService) {
             binding.fabSub.setOnClickListener {
                 if (packageService.newAvailable > 1) {
-                    packageService.newAvailable -= 1
+                    packageService.newAvailable--
                     listener.setAmount(packageService)
+                    binding.fabSub.isEnabled = true
+                    binding.fabSum.isEnabled = true
+                } else if (packageService.newAvailable == 1) {
+                    binding.fabSub.isEnabled = false
+                    binding.fabSum.isEnabled = true
                 }
             }
             binding.fabSum.setOnClickListener {
-                if (packageService.newAvailable < packageService.available) {
-                    packageService.newAvailable += 1
+                if (packageService.newAvailable < 5) {
+                    packageService.newAvailable++
                     listener.setAmount(packageService)
+                    binding.fabSum.isEnabled = true
+                    binding.fabSub.isEnabled = true
+                } else if (packageService.newAvailable == 5) {
+                    binding.fabSum.isEnabled = false
+                    binding.fabSub.isEnabled = true
                 }
             }
         }

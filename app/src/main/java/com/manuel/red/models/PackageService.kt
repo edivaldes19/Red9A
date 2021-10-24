@@ -13,7 +13,8 @@ data class PackageService(
     var limit: Int = 0,
     var validity: Int = 0,
     var imagePath: String? = null,
-    var administratorId: String = ""
+    var administratorId: String = "",
+    var lastModification: Long = 0
 ) {
     fun totalPrice(): Int = newAvailable * price
     override fun equals(other: Any?): Boolean {

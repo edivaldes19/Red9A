@@ -10,6 +10,7 @@
     <string name="add_package">Agregar paquete</string>
     <string name="delete">Eliminar</string>
     <string name="remove_package">Eliminar paquete</string>
+    <string name="remove_contract">Eliminar contrato</string>
     <string name="update">Actualizar</string>
     <string name="update_package">Actualizar paquete</string>
     <string name="are_you_sure_to_take_this_action">¿Está seguro de realizar esta acción?</string>
@@ -29,6 +30,7 @@
     <string name="failed_to_update_package">Error al actualizar el paquete.</string>
     <string name="write_a_message">Escribe un mensaje…</string>
     <string name="technical_support">Soporte técnico</string>
+    <string name="contract">Contrato</string>
     <string name="my_contracts">Mis contratos</string>
     <string name="error_loading_chat_messages">Error al cargar los mensajes del chat.</string>
     <string name="error_clearing_message">Error al eliminar el mensaje.</string>
@@ -102,4 +104,12 @@
     <string name="this_field_is_required">Este campo es obligatorio.</string>
     <string name="discount_from">Descuento del</string>
     <string name="yes">Sí</string>
+    <string name="search">Buscar</string>
+    <string name="write_here_to_search">Escribe aquí para buscar…</string>
+    <string name="failed_to_get_the_last_modification">Error al obtener la última modificación.</string>
+    <string name="last_modification">Última modificación</string>
+    <string name="without_results">Sin resultados.</string>
+    <string name="subscriber_number">Número de suscriptor</string>
+    <string name="you_cannot_contract_more_than_5_packages_of_the_same_type">No puedes contratar más de 5 paquetes del mismo tipo.</string>
+    <string name="the_quantity_cannot_be_zero">La cantidad no puede ser 0.</string>
 </resources>

@@ -13,16 +13,32 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_padding_min">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tvId"
-            android:layout_width="0dp"
+        <LinearLayout
+            android:id="@+id/llIdAndDelete"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/requested_contract_id"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@id/tvPackageServiceNames"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/requested_contract_id"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/imgDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/ic_delete" />
+        </LinearLayout>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvPackageServiceNames"
@@ -32,7 +48,7 @@
             app:layout_constraintBottom_toTopOf="@id/llChat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvId"
+            app:layout_constraintTop_toBottomOf="@id/llIdAndDelete"
             tools:text="Pauqete MAX, Paquete Premium, Paquete Estándar" />
 
         <LinearLayout

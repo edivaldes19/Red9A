@@ -15,6 +15,7 @@
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_close.xml" value="0.1707236842105263" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_cloud_download.xml" value="0.1707236842105263" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_contact_phone.xml" value="0.1707236842105263" />
+        <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_delete.xml" value="0.2703125" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_email.xml" value="0.1707236842105263" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_error_outline.xml" value="0.1707236842105263" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_facebook.xml" value="0.1707236842105263" />
@@ -33,6 +34,7 @@
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_playlist_add_check.xml" value="0.1707236842105263" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_remove_circle.xml" value="0.1707236842105263" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_router.xml" value="0.1707236842105263" />
+        <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_search.xml" value="0.2703125" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_send.xml" value="0.1707236842105263" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_spellcheck.xml" value="0.1707236842105263" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/drawable/ic_user.xml" value="0.2703125" />
@@ -46,12 +48,13 @@
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/layout/fragment_contract_status.xml" value="0.22314814814814815" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/layout/fragment_detail.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/layout/fragment_offers_and_promotions.xml" value="0.14963503649635038" />
-        <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/layout/fragment_profile.xml" value="0.22314814814814815" />
+        <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/layout/fragment_profile.xml" value="0.264" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/layout/item_chat.xml" value="0.264" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/layout/item_package_service.xml" value="0.25025641025641027" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/layout/item_package_service_contract_list.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/layout/item_requested_contract.xml" value="0.25025641025641027" />
+        <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/layout/item_requested_contract.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/layout/view_login.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/menu/menu_just_search.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/menu/menu_main.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2703125" />
         <entry key="..\:/Users/Manuel/AndroidStudioProjects/Red/app/src/main/res/xml/root_preferences.xml" value="0.264" />

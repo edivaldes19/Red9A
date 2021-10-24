@@ -64,6 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/common_padding_min"
+        app:counterMaxLength="1"
         app:layout_constraintBottom_toBottomOf="@id/fabSub"
         app:layout_constraintStart_toEndOf="@id/fabSub"
         app:layout_constraintTop_toTopOf="@id/fabSub">
@@ -72,9 +73,11 @@
             android:id="@+id/etNewAvailable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="3"
+            android:digits="12345"
+            android:ems="1"
             android:imeOptions="actionDone"
             android:inputType="number"
+            android:maxLength="1"
             android:textAlignment="center"
             tools:text="5" />
     </com.google.android.material.textfield.TextInputLayout>
