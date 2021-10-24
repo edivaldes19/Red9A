@@ -26,7 +26,7 @@ import com.manuel.red.utils.Constants
 class RequestedContractActivity : AppCompatActivity(), OnRequestedContractListener,
     RequestedContractAux {
     private lateinit var binding: ActivityRequestedContractBinding
-    private lateinit var requestedContractAdapter: RequestedContractAdapter
+    private lateinit var contractAdapter: RequestedContractAdapter
     private lateinit var requestedContractSelected: RequestedContract
     private lateinit var listenerRegistration: ListenerRegistration
     private var requestedContractList: MutableList<RequestedContract> = mutableListOf()
@@ -69,7 +69,7 @@ class RequestedContractActivity : AppCompatActivity(), OnRequestedContractListen
                         temporaryList.add(requestedContract)
                     }
                 }
-                requestedContractAdapter.updateList(temporaryList)
+                contractAdapter.updateList(temporaryList)
                 if (temporaryList.isNullOrEmpty()) {
                     binding.tvWithoutResults.visibility = View.VISIBLE
                 } else {
@@ -135,10 +135,10 @@ class RequestedContractActivity : AppCompatActivity(), OnRequestedContractListen
     }
 
     private fun setupRecyclerView() {
-        requestedContractAdapter = RequestedContractAdapter(requestedContractList, this)
+        contractAdapter = RequestedContractAdapter(requestedContractList, this)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(this@RequestedContractActivity)
-            adapter = this@RequestedContractActivity.requestedContractAdapter
+            adapter = this@RequestedContractActivity.contractAdapter
         }
     }
 
@@ -160,10 +160,10 @@ class RequestedContractActivity : AppCompatActivity(), OnRequestedContractListen
                     val requestedContract =
                         snapshot.document.toObject(RequestedContract::class.java)
                     requestedContract.id = snapshot.document.id
-                    if (snapshot.type == DocumentChange.Type.ADDED) {
-                        requestedContractAdapter.add(requestedContract)
-                    } else if (snapshot.type == DocumentChange.Type.REMOVED) {
-                        requestedContractAdapter.delete(requestedContract)
+                    when (snapshot.type) {
+                        DocumentChange.Type.ADDED -> contractAdapter.add(requestedContract)
+                        DocumentChange.Type.MODIFIED -> contractAdapter.update(requestedContract)
+                        DocumentChange.Type.REMOVED -> contractAdapter.delete(requestedContract)
                     }
                 }
             }

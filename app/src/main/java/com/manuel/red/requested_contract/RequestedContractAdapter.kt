@@ -61,6 +61,16 @@ class RequestedContractAdapter(
         if (!requestedContractList.contains(requestedContract)) {
             requestedContractList.add(requestedContract)
             notifyItemInserted(requestedContractList.size - 1)
+        } else {
+            update(requestedContract)
+        }
+    }
+
+    fun update(requestedContract: RequestedContract) {
+        val index = requestedContractList.indexOf(requestedContract)
+        if (index != -1) {
+            requestedContractList[index] = requestedContract
+            notifyItemChanged(index)
         }
     }
 
