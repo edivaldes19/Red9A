@@ -14,7 +14,6 @@ import com.manuel.red.R;
 import java.util.Properties;
 
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -75,12 +74,12 @@ public class JavaMailAPI extends AsyncTask<Void, Integer, Void> {
         });
         try {
             MimeMessage mimeMessage = new MimeMessage(session);
-            mimeMessage.setFrom(new InternetAddress(Constants.EMAIL));
-            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
+            mimeMessage.setFrom(new InternetAddress(null, email));
+            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(Constants.EMAIL));
             mimeMessage.setSubject(subject);
             mimeMessage.setText(message);
             Transport.send(mimeMessage);
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
