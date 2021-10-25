@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
                 if (response == null) {
                     Toast.makeText(this, getString(R.string.see_you_soon), Toast.LENGTH_SHORT)
                         .show()
-                    finish()
+                    finishAffinity()
                 } else {
                     response.error?.let { firebaseUiException ->
                         if (firebaseUiException.errorCode == ErrorCodes.NO_NETWORK) {

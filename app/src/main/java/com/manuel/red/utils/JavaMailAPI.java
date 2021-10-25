@@ -57,6 +57,7 @@ public class JavaMailAPI extends AsyncTask<Void, Integer, Void> {
     protected void onCancelled(Void unused) {
         super.onCancelled(unused);
         alertDialog.dismiss();
+        Toast.makeText(context, context.getString(R.string.error_sending_email), Toast.LENGTH_SHORT).show();
     }
 
     @Override

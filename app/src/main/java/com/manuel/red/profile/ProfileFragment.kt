@@ -179,7 +179,7 @@ class ProfileFragment : Fragment() {
                 getBitmapFromUri(uri)?.let { bitmap ->
                     binding.progressBar.visibility = View.VISIBLE
                     val byteArrayOutputStream = ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 75, byteArrayOutputStream)
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
                     profileRef.putBytes(byteArrayOutputStream.toByteArray())
                         .addOnProgressListener { taskSnapshot ->
                             val progress =
@@ -228,15 +228,13 @@ class ProfileFragment : Fragment() {
     private fun getResizedImage(image: Bitmap): Bitmap {
         var width = image.width
         var height = image.height
-        if (width <= 500 && height <= 500) {
-            return image
-        }
+        if (width <= 256 && height <= 256) return image
         val bitmapRatio = width.toFloat() / height.toFloat()
         if (bitmapRatio > 1) {
-            width = 500
+            width = 256
             height = (width / bitmapRatio).toInt()
         } else {
-            height = 500
+            height = 256
             width = (height / bitmapRatio).toInt()
         }
         return Bitmap.createScaledBitmap(image, width, height, true)
