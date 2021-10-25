@@ -43,6 +43,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.manuel.red.R
+import com.manuel.red.about.AboutActivity
 import com.manuel.red.contract_list.ContractListFragment
 import com.manuel.red.databinding.ActivityMainBinding
 import com.manuel.red.detail.DetailFragment
@@ -191,6 +192,30 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.action_offers_and_promotions -> {
+                val fragment = OffersAndPromotionsFragment()
+                supportFragmentManager.beginTransaction().add(R.id.containerMain, fragment)
+                    .addToBackStack(null).commit()
+                showButton(false)
+            }
+            R.id.action_profile -> {
+                val fragment = ProfileFragment()
+                supportFragmentManager.beginTransaction().add(R.id.containerMain, fragment)
+                    .addToBackStack(null).commit()
+                showButton(false)
+            }
+            R.id.action_requested_contract_history -> startActivity(
+                Intent(
+                    this,
+                    RequestedContractActivity::class.java
+                )
+            )
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+            }
+            R.id.action_about -> {
+                startActivity(Intent(this, AboutActivity::class.java))
+            }
             R.id.action_sign_off -> {
                 MaterialAlertDialogBuilder(this).setTitle(getString(R.string.sign_off))
                     .setMessage(getString(R.string.are_you_sure_to_take_this_action))
@@ -213,27 +238,6 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
                             }
                         }
                     }.setNegativeButton(getString(R.string.cancel), null).show()
-            }
-            R.id.action_requested_contract_history -> startActivity(
-                Intent(
-                    this,
-                    RequestedContractActivity::class.java
-                )
-            )
-            R.id.action_profile -> {
-                val fragment = ProfileFragment()
-                supportFragmentManager.beginTransaction().add(R.id.containerMain, fragment)
-                    .addToBackStack(null).commit()
-                showButton(false)
-            }
-            R.id.action_settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
-            }
-            R.id.action_offers_and_promotions -> {
-                val fragment = OffersAndPromotionsFragment()
-                supportFragmentManager.beginTransaction().add(R.id.containerMain, fragment)
-                    .addToBackStack(null).commit()
-                showButton(false)
             }
         }
         return super.onOptionsItemSelected(item)

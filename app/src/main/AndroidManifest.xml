@@ -15,6 +15,12 @@
         android:theme="@style/Theme.Red"
         tools:ignore="AllowBackup">
         <activity
+            android:name=".about.AboutActivity"
+            android:label="@string/about"
+            android:parentActivityName=".package_service.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/settings"
             android:parentActivityName=".package_service.MainActivity"
