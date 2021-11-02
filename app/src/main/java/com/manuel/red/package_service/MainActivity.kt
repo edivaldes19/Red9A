@@ -411,7 +411,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         packageServiceAdapter = PackageServiceAdapter(packageServiceList, this)
         binding.recyclerView.apply {
             layoutManager =
-                GridLayoutManager(this@MainActivity, 2, GridLayoutManager.HORIZONTAL, false)
+                GridLayoutManager(this@MainActivity, 3, GridLayoutManager.HORIZONTAL, false)
             adapter = this@MainActivity.packageServiceAdapter
         }
     }

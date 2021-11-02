@@ -178,7 +178,7 @@ class ChatFragment : Fragment(), OnChatListener {
     private fun setupButtons() {
         binding?.let { binding ->
             binding.fabSend.setOnClickListener {
-                if (binding.etMessage.text.isNullOrEmpty()) {
+                if (binding.etMessage.text.toString().trim().isEmpty()) {
                     binding.tilMessage.run {
                         error = getString(R.string.this_field_is_required)
                         requestFocus()
