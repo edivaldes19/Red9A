@@ -1,12 +1,10 @@
 package com.manuel.red.chat
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.forEachIndexed
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -53,24 +51,32 @@ class ChatFragment : Fragment(), OnChatListener {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.forEachIndexed { _, item ->
+            item.isVisible = false
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
     }
 
     override fun onDestroy() {
+        super.onDestroy()
         (activity as? AppCompatActivity)?.let { activity ->
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
             activity.supportActionBar?.title = getString(R.string.my_contracts)
+            setHasOptionsMenu(false)
         }
-        super.onDestroy()
     }
 
     override fun deleteMessage(message: Message) {
-        requestedContract?.let {
+        requestedContract?.let { contract ->
             val database = Firebase.database
             val messageRef =
-                database.getReference(Constants.PATH_CHATS).child(it.id).child(message.id)
+                database.getReference(Constants.PATH_CHATS).child(contract.id).child(message.id)
             messageRef.removeValue { error, _ ->
                 binding?.let { view ->
                     if (error != null) {
@@ -103,6 +109,7 @@ class ChatFragment : Fragment(), OnChatListener {
         (activity as? AppCompatActivity)?.let { activity ->
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             activity.supportActionBar?.title = getString(R.string.technical_support)
+            setHasOptionsMenu(true)
         }
     }
 

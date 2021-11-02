@@ -10,7 +10,6 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -35,7 +34,6 @@ class FCMService : FirebaseMessagingService() {
         preferences.edit {
             putString(Constants.PROP_TOKEN, newToken).apply()
         }
-        Log.i("New token", newToken)
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {

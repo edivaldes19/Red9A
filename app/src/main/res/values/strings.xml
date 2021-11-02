@@ -9,6 +9,7 @@
     <string name="add">Agregar</string>
     <string name="add_package">Agregar paquete</string>
     <string name="delete">Eliminar</string>
+    <string name="removed">eliminado</string>
     <string name="remove_package">Eliminar paquete</string>
     <string name="remove_contract">Eliminar contrato</string>
     <string name="update">Actualizar</string>
@@ -99,15 +100,16 @@
     <string name="facebook_login_protocol_scheme" translatable="false">fb278337960816104</string>
     <string name="months">meses</string>
     <string name="edited_profile_successfully">Perfil editado exitosamente.</string>
-    <string name="error_editing_profile_with_firebase_ui">Error al editar el perfil con Firebase AuthUI</string>
-    <string name="error_editing_profile_with_firebase_firestore">Error al editar el perfil con Firebase Firestore</string>
+    <string name="error_editing_profile_with_firebase_ui">Error al editar el perfil con Firebase AuthUI.</string>
+    <string name="error_editing_profile_with_firebase_firestore">Error al editar el perfil con Firebase Firestore.</string>
     <string name="this_field_is_required">Este campo es obligatorio.</string>
     <string name="discount_from">Descuento del</string>
     <string name="yes">Sí</string>
     <string name="search">Buscar</string>
-    <string name="write_here_to_search">Escribe aquí para buscar…</string>
+    <string name="search_by_name">Buscar por nombre…</string>
+    <string name="search_by_id">Buscar por ID…</string>
     <string name="failed_to_get_the_last_modification">Error al obtener la última modificación.</string>
-    <string name="last_modification">Última modificación</string>
+    <string name="last_update">Última actualización</string>
     <string name="without_results">Sin resultados.</string>
     <string name="subscriber_number">Número de suscriptor</string>
     <string name="you_cannot_contract_more_than_5_packages_of_the_same_type">No puedes contratar más de 5 paquetes del mismo tipo.</string>
@@ -118,7 +120,6 @@
     <string name="eduardo">👨‍💻 Eduardo López Villegas</string>
     <string name="antonio">👨‍💻 Jesús Antonio García Zamudio</string>
     <string name="manuel">👨‍💻 Edgar Manuel Velázquez Valdes</string>
-    <string name="complaints_and_suggestions">Quejas y sugerencias</string>
     <string name="about">Acerca de</string>
     <string name="sending_email">Enviando correo electrónico…</string>
     <string name="wait_a_moment_please" tools:ignore="Typos">Por favor, espere un momento…</string>

@@ -10,16 +10,16 @@ import com.google.firebase.storage.StorageReference
 import com.manuel.red.R
 
 class DetailAdapter(
-    private val imgList: MutableList<StorageReference>,
+    private val pictureList: MutableList<StorageReference>,
     private val context: Context
 ) : PagerAdapter() {
-    override fun getCount(): Int = imgList.size
+    override fun getCount(): Int = pictureList.size
     override fun isViewFromObject(view: View, `object`: Any): Boolean = view == `object`
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val imgPackageService = ShapeableImageView(context)
-        GlideApp.with(context).load(imgList[position]).diskCacheStrategy(DiskCacheStrategy.ALL)
+        GlideApp.with(context).load(pictureList[position]).diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_error_outline)
-            .centerCrop().into(imgPackageService)
+            .into(imgPackageService)
         container.addView(imgPackageService, 0)
         return imgPackageService
     }

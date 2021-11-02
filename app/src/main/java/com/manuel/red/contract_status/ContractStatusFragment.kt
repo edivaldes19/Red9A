@@ -1,12 +1,10 @@
 package com.manuel.red.contract_status
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.forEachIndexed
 import androidx.fragment.app.Fragment
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -47,17 +45,25 @@ class ContractStatusFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.forEachIndexed { _, item ->
+            item.isVisible = false
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
     }
 
     override fun onDestroy() {
+        super.onDestroy()
         (activity as? AppCompatActivity)?.let { activity ->
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
             activity.supportActionBar?.title = getString(R.string.my_contracts)
+            setHasOptionsMenu(false)
         }
-        super.onDestroy()
     }
 
     private fun getRequestedContract() {
@@ -66,14 +72,18 @@ class ContractStatusFragment : Fragment() {
             updateUI(contract)
             getRequestedContractInRealtime(contract.id)
             setupActionBar()
-            configAnalytics()
+            setupAnalytics()
         }
     }
 
     private fun updateUI(requestedContract: RequestedContract) {
         binding?.let { view ->
-            view.progressBar.progress =
-                requestedContract.status * (100 / 3) - 15
+            view.progressBar.progress = when (requestedContract.status) {
+                1 -> 10
+                2 -> 50
+                3 -> 100
+                else -> 0
+            }
             view.cbOnHold.isChecked = requestedContract.status > 0
             view.cbActivated.isChecked = requestedContract.status > 1
             view.cbTimedOut.isChecked = requestedContract.status > 2
@@ -107,13 +117,14 @@ class ContractStatusFragment : Fragment() {
         (activity as? AppCompatActivity)?.let { activity ->
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             activity.supportActionBar?.title = getString(R.string.contract_status)
+            setHasOptionsMenu(true)
         }
     }
 
-    private fun configAnalytics() {
+    private fun setupAnalytics() {
         firebaseAnalytics = Firebase.analytics
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
-            param(FirebaseAnalytics.Param.METHOD, "check_contract_status")
+            param(FirebaseAnalytics.Param.METHOD, Constants.PROP_CHECK_CONTRACT_STATUS)
         }
     }
 }

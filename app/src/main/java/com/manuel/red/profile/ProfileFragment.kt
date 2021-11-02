@@ -10,11 +10,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.forEachIndexed
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -35,6 +35,7 @@ import java.util.*
 class ProfileFragment : Fragment() {
     private var binding: FragmentProfileBinding? = null
     private var photoSelectedUri: Uri? = null
+    private var mainTitle = ""
     private val errorSnack: Snackbar by lazy {
         Snackbar.make(binding!!.root, "", Snackbar.LENGTH_SHORT).setTextColor(Color.YELLOW)
     }
@@ -45,8 +46,7 @@ class ProfileFragment : Fragment() {
                 binding?.let { view ->
                     Glide.with(this).load(photoSelectedUri).diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ic_cloud_download)
-                        .error(R.drawable.ic_error_outline).centerCrop().circleCrop()
-                        .into(view.imgProfile)
+                        .error(R.drawable.ic_error_outline).into(view.imgProfile)
                 }
             }
         }
@@ -66,13 +66,45 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getUser()
-        configButtons()
+        setupButtons()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            activity?.onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroyView() {
-        (activity as? MainAux)?.showButton(true)
         super.onDestroyView()
+        (activity as? MainAux)?.showButton(true)
         binding = null
+    }
+
+    override fun onDestroy() {
+        (activity as? AppCompatActivity)?.let { activity ->
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            activity.supportActionBar?.title = mainTitle
+            setHasOptionsMenu(false)
+        }
+        super.onDestroy()
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.forEachIndexed { _, item ->
+            item.isVisible = false
+        }
+    }
+
+    private fun setupActionBar() {
+        (activity as? AppCompatActivity)?.let { activity ->
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            mainTitle = activity.supportActionBar?.title.toString()
+            activity.supportActionBar?.title = getString(R.string.my_profile)
+            setHasOptionsMenu(true)
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -84,7 +116,7 @@ class ProfileFragment : Fragment() {
                 docRef.get().addOnSuccessListener { document ->
                     if (document != null) {
                         binding.tvLastModification.text =
-                            "${getString(R.string.last_modification)}: ${
+                            "${getString(R.string.last_update)}: ${
                                 TimestampToText.getTimeAgo(document.getLong(Constants.PROP_LAST_MODIFICATION)!!)
                                     .lowercase(Locale.getDefault())
                             }."
@@ -100,17 +132,19 @@ class ProfileFragment : Fragment() {
                 binding.etFullName.setText(user.displayName)
                 Glide.with(this).load(user.photoUrl).diskCacheStrategy(DiskCacheStrategy.ALL)
                     .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_error_outline)
-                    .centerCrop().circleCrop().into(binding.imgProfile)
+                    .into(binding.imgProfile)
+                setupActionBar()
             }
         }
     }
 
-    private fun configButtons() {
+    private fun setupButtons() {
         binding?.let { binding ->
             binding.imgProfile.setOnClickListener {
                 openGallery()
             }
             binding.btnUpdate.setOnClickListener {
+                enableAllInterface(false)
                 binding.etFullName.clearFocus()
                 FirebaseAuth.getInstance().currentUser?.let { user ->
                     if (photoSelectedUri == null) {
@@ -152,6 +186,7 @@ class ProfileFragment : Fragment() {
                             getString(R.string.edited_profile_successfully),
                             Toast.LENGTH_SHORT
                         ).show()
+                        mainTitle = user.displayName.toString()
                         (activity as? MainAux)?.updateTitle(user)
                         activity?.onBackPressed()
                     }.addOnFailureListener {
@@ -159,13 +194,23 @@ class ProfileFragment : Fragment() {
                             setText(getString(R.string.error_editing_profile_with_firebase_firestore))
                             show()
                         }
+                        enableAllInterface(true)
                     }
             }.addOnFailureListener {
                 errorSnack.apply {
                     setText(getString(R.string.error_editing_profile_with_firebase_ui))
                     show()
                 }
+                enableAllInterface(true)
             }
+        }
+    }
+
+    private fun enableAllInterface(enable: Boolean) {
+        binding?.let { view ->
+            view.imgProfile.isEnabled = enable
+            view.etFullName.isEnabled = enable
+            view.btnUpdate.isEnabled = enable
         }
     }
 
@@ -196,7 +241,7 @@ class ProfileFragment : Fragment() {
                             }
                         }.addOnCompleteListener {
                             binding.progressBar.visibility = View.INVISIBLE
-                            binding.tvProgress.text = ""
+                            binding.tvProgress.text = null
                         }.addOnSuccessListener { taskSnapshot ->
                             taskSnapshot.storage.downloadUrl.addOnSuccessListener { downloadUrl ->
                                 updateUserProfile(binding, user, downloadUrl)
@@ -206,6 +251,7 @@ class ProfileFragment : Fragment() {
                                 setText(getString(R.string.image_upload_error))
                                 show()
                             }
+                            enableAllInterface(true)
                         }
                 }
             }

@@ -129,11 +129,11 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        configRemoteConfig()
-        configAuth()
-        configRecyclerView()
-        configButtons()
-        configAnalytics()
+        setupRemoteConfig()
+        setupAuth()
+        setupRecyclerView()
+        setupButtons()
+        setupAnalytics()
         checkConnection()
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     override fun onResume() {
         super.onResume()
         firebaseAuth.addAuthStateListener(authStateListener)
-        configFirestoreRealtime()
+        setupFirestoreInRealtime()
     }
 
     override fun onPause() {
@@ -165,14 +165,14 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         menuInflater.inflate(R.menu.menu_main, menu)
         val menuItem = menu?.findItem(R.id.action_search)
         val searchView = menuItem?.actionView as SearchView
-        searchView.queryHint = getString(R.string.write_here_to_search)
+        searchView.queryHint = getString(R.string.search_by_name)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                val temporaryList: MutableList<PackageService> = ArrayList()
+                val temporaryList: MutableList<PackageService> = mutableListOf()
                 for (packageService in packageServiceList) {
                     if (newText!! in packageService.name.toString()) {
                         temporaryList.add(packageService)
@@ -328,7 +328,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     }
 
     @SuppressLint("UnsafeOptInUsageError")
-    private fun configRemoteConfig() {
+    private fun setupRemoteConfig() {
         val remoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
             minimumFetchIntervalInSeconds = 10
@@ -355,7 +355,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     }
 
     @SuppressLint("PackageManagerGetSignatures")
-    private fun configAuth() {
+    private fun setupAuth() {
         firebaseAuth = FirebaseAuth.getInstance()
         authStateListener = FirebaseAuth.AuthStateListener { auth ->
             if (auth.currentUser != null) {
@@ -407,7 +407,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         }
     }
 
-    private fun configRecyclerView() {
+    private fun setupRecyclerView() {
         packageServiceAdapter = PackageServiceAdapter(packageServiceList, this)
         binding.recyclerView.apply {
             layoutManager =
@@ -416,7 +416,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         }
     }
 
-    private fun configButtons() {
+    private fun setupButtons() {
         binding.btnViewContractList.setOnClickListener {
             val fragment = ContractListFragment()
             fragment.show(
@@ -426,11 +426,11 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         }
     }
 
-    private fun configAnalytics() {
+    private fun setupAnalytics() {
         firebaseAnalytics = Firebase.analytics
     }
 
-    private fun configFirestoreRealtime() {
+    private fun setupFirestoreInRealtime() {
         val db = FirebaseFirestore.getInstance()
         val packageServiceRef = db.collection(Constants.COLL_PACKAGE_SERVICE)
         listenerRegistration = packageServiceRef.addSnapshotListener { snapshots, error ->

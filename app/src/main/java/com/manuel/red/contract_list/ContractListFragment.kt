@@ -44,7 +44,7 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
             setupRecyclerView()
             setupButtons()
             getPackageServices()
-            configAnalytics()
+            setupAnalytics()
             return bottomSheetDialog
         }
         return super.onCreateDialog(savedInstanceState)
@@ -78,7 +78,7 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
         }
     }
 
-    private fun configAnalytics() {
+    private fun setupAnalytics() {
         firebaseAnalytics = Firebase.analytics
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
             param(FirebaseAnalytics.Param.METHOD, "check_contract_status")
@@ -129,7 +129,7 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
                     requestedContract.packagesServices.forEach { entry ->
                         if (entry.value.available >= 3) {
                             val bundle = Bundle()
-                            bundle.putString("id_package_service", entry.key)
+                            bundle.putString(Constants.PROP_ID_PACKAGE_SERVICE, entry.key)
                             services.add(bundle)
                         }
                     }
@@ -138,9 +138,9 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
                 firebaseAnalytics.setUserProperty(
                     Constants.USER_PROP_DISCOUNT,
                     if (packageServices.size > 0) {
-                        "with_discount"
+                        Constants.PROP_WITH_DISCOUNT
                     } else {
-                        "without_discount"
+                        Constants.PROP_WITHOUT_DISCOUNT
                     }
                 )
             }.addOnFailureListener {

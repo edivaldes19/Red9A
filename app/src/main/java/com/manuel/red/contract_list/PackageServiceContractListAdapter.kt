@@ -30,7 +30,7 @@ class PackageServiceContractListAdapter(
         holder.binding.tvAmount.text = packageService.newAvailable.toString()
         Glide.with(context).load(packageService.imagePath).diskCacheStrategy(DiskCacheStrategy.ALL)
             .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_error_outline)
-            .centerCrop().circleCrop().into(holder.binding.imgPackageService)
+            .into(holder.binding.imgPackageService)
     }
 
     override fun getItemCount(): Int = packageServiceList.size

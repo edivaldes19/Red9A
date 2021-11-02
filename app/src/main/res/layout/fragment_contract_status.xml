@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/common_padding_min"
             android:layout_marginBottom="@dimen/contract_status_margin_bottom_progress"
+            android:max="100"
             app:indicatorColor="?colorSecondaryVariant"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

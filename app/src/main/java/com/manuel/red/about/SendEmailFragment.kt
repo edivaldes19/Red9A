@@ -12,10 +12,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.manuel.red.utils.TextWatchers
 import com.manuel.red.R
 import com.manuel.red.databinding.FragmentSendAnEmailBinding
 import com.manuel.red.utils.JavaMailAPI
+import com.manuel.red.utils.TextWatchers
 
 class SendEmailFragment : DialogFragment(), DialogInterface.OnShowListener {
     private var binding: FragmentSendAnEmailBinding? = null
@@ -38,7 +38,7 @@ class SendEmailFragment : DialogFragment(), DialogInterface.OnShowListener {
                     view.etMessage
                 )
                 val builder =
-                    MaterialAlertDialogBuilder(activity).setTitle(getString(R.string.complaints_and_suggestions))
+                    MaterialAlertDialogBuilder(activity).setTitle(getString(R.string.post_comments))
                         .setView(view.root)
                 val dialog = builder.create()
                 dialog.setOnShowListener(this)

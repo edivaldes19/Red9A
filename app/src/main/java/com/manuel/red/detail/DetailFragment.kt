@@ -2,10 +2,10 @@ package com.manuel.red.detail
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
+import androidx.core.view.forEachIndexed
 import androidx.fragment.app.Fragment
 import com.google.firebase.storage.FirebaseStorage
 import com.manuel.red.R
@@ -17,6 +17,7 @@ import com.manuel.red.utils.Constants
 class DetailFragment : Fragment() {
     private var binding: FragmentDetailBinding? = null
     private var packageService: PackageService? = null
+    private var mainTitle = ""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,35 +34,59 @@ class DetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getPackageService()
         setupButtons()
+        setupActionBar()
     }
 
     override fun onDestroyView() {
-        (activity as? MainAux)?.showButton(true)
         super.onDestroyView()
+        (activity as? MainAux)?.showButton(true)
         binding = null
+    }
+
+    override fun onDestroy() {
+        (activity as? AppCompatActivity)?.let { activity ->
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            activity.supportActionBar?.title = mainTitle
+            setHasOptionsMenu(false)
+        }
+        super.onDestroy()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            activity?.onBackPressed()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        menu.forEachIndexed { _, item ->
+            item.isVisible = false
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun getPackageService() {
         packageService = (activity as? MainAux)?.getPackageServiceSelected()
-        packageService?.let { packageService1 ->
+        packageService?.let { pack ->
             binding?.let { binding ->
-                binding.tvName.text = packageService1.name
+                binding.tvName.text = pack.name
                 binding.tvDescription.text =
-                    "${getString(R.string.description)}: ${packageService1.description}"
-                binding.tvPrice.text = "${getString(R.string.price)}: $${packageService1.price} MXN"
-                binding.tvSpeed.text = "${getString(R.string.speed)}: ${packageService1.speed} Mbps"
-                binding.tvLimit.text = "${getString(R.string.limit)}: ${packageService1.limit} Gbps"
+                    "${getString(R.string.description)}: ${pack.description}"
+                binding.tvPrice.text = "${getString(R.string.price)}: $${pack.price} MXN"
+                binding.tvSpeed.text = "${getString(R.string.speed)}: ${pack.speed} Mbps"
+                binding.tvLimit.text = "${getString(R.string.limit)}: ${pack.limit} Gbps"
                 binding.tvValidity.text =
-                    "${getString(R.string.validity)}: ${packageService1.validity} ${getString(R.string.months)}"
+                    "${getString(R.string.validity)}: ${pack.validity} ${getString(R.string.months)}"
                 binding.tvAvailable.text =
-                    getString(R.string.detail_available, packageService1.available)
-                setNewAvailable(packageService1)
+                    getString(R.string.detail_available, pack.available)
+                setNewAvailable(pack)
                 context?.let { context ->
                     val packageServiceRef =
-                        FirebaseStorage.getInstance().reference.child(packageService1.administratorId)
+                        FirebaseStorage.getInstance().reference.child(pack.administratorId)
                             .child(Constants.PATH_PACKAGE_SERVICE_IMAGES)
-                            .child(packageService1.id!!)
+                            .child(pack.id!!)
                     packageServiceRef.listAll().addOnSuccessListener { imgList ->
                         val detailAdapter = DetailAdapter(imgList.items, context)
                         binding.vpPackageService.apply {
@@ -124,6 +149,15 @@ class DetailFragment : Fragment() {
         (activity as? MainAux)?.let { mainAux ->
             mainAux.addPackageServiceToContractList(packageService)
             activity?.onBackPressed()
+        }
+    }
+
+    private fun setupActionBar() {
+        (activity as? AppCompatActivity)?.let { activity ->
+            activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            mainTitle = activity.supportActionBar?.title.toString()
+            activity.supportActionBar?.title = packageService?.name
+            setHasOptionsMenu(true)
         }
     }
 }
