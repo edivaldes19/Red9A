@@ -9,12 +9,12 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.manuel.red.R
 import com.manuel.red.databinding.FragmentContractStatusBinding
 import com.manuel.red.models.RequestedContract
-import com.manuel.red.requested_contract.RequestedContractAux
+import com.manuel.red.requested_contract.OnRequestedContractSelected
 import com.manuel.red.utils.Constants
 
 class ContractStatusFragment : Fragment() {
@@ -67,7 +67,8 @@ class ContractStatusFragment : Fragment() {
     }
 
     private fun getRequestedContract() {
-        requestedContract = (activity as? RequestedContractAux)?.getRequestedContractSelected()
+        requestedContract =
+            (activity as? OnRequestedContractSelected)?.getRequestedContractSelected()
         requestedContract?.let { contract ->
             updateUI(contract)
             getRequestedContractInRealtime(contract.id)
@@ -91,10 +92,10 @@ class ContractStatusFragment : Fragment() {
     }
 
     private fun getRequestedContractInRealtime(requestedContractId: String) {
-        val db = FirebaseFirestore.getInstance()
-        val requestedContractRef =
+        val db = Firebase.firestore
+        val reference =
             db.collection(Constants.COLL_CONTRACTS_REQUESTED).document(requestedContractId)
-        requestedContractRef.addSnapshotListener { snapshot, error ->
+        reference.addSnapshotListener { documentSnapshot, error ->
             if (error != null) {
                 Toast.makeText(
                     activity,
@@ -103,10 +104,10 @@ class ContractStatusFragment : Fragment() {
                 ).show()
                 return@addSnapshotListener
             }
-            if (snapshot != null && snapshot.exists()) {
-                val requestedContract = snapshot.toObject(RequestedContract::class.java)
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                val requestedContract = documentSnapshot.toObject(RequestedContract::class.java)
                 requestedContract?.let { requestedContract1 ->
-                    requestedContract1.id = snapshot.id
+                    requestedContract1.id = documentSnapshot.id
                     updateUI(requestedContract1)
                 }
             }

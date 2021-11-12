@@ -12,7 +12,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.manuel.red.R
 import com.manuel.red.databinding.FragmentOffersAndPromotionsBinding
-import com.manuel.red.package_service.MainAux
+import com.manuel.red.package_service.OnMethodsToMainActivity
 import com.manuel.red.utils.Constants
 
 class OffersAndPromotionsFragment : Fragment() {
@@ -38,7 +38,7 @@ class OffersAndPromotionsFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (activity as? MainAux)?.showButton(true)
+        (activity as? OnMethodsToMainActivity)?.showButton(true)
         binding = null
     }
 

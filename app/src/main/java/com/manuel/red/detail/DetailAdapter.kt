@@ -18,7 +18,7 @@ class DetailAdapter(
     override fun instantiateItem(container: ViewGroup, position: Int): Any {
         val imgPackageService = ShapeableImageView(context)
         GlideApp.with(context).load(pictureList[position]).diskCacheStrategy(DiskCacheStrategy.ALL)
-            .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_error_outline)
+            .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_broken_image)
             .into(imgPackageService)
         container.addView(imgPackageService, 0)
         return imgPackageService

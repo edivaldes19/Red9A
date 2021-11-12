@@ -7,11 +7,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
 import androidx.core.view.forEachIndexed
 import androidx.fragment.app.Fragment
-import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.manuel.red.R
 import com.manuel.red.databinding.FragmentDetailBinding
 import com.manuel.red.models.PackageService
-import com.manuel.red.package_service.MainAux
+import com.manuel.red.package_service.OnMethodsToMainActivity
 import com.manuel.red.utils.Constants
 
 class DetailFragment : Fragment() {
@@ -39,7 +40,7 @@ class DetailFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (activity as? MainAux)?.showButton(true)
+        (activity as? OnMethodsToMainActivity)?.showButton(true)
         binding = null
     }
 
@@ -68,7 +69,7 @@ class DetailFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun getPackageService() {
-        packageService = (activity as? MainAux)?.getPackageServiceSelected()
+        packageService = (activity as? OnMethodsToMainActivity)?.getPackageServiceSelected()
         packageService?.let { pack ->
             binding?.let { binding ->
                 binding.tvName.text = pack.name
@@ -83,12 +84,10 @@ class DetailFragment : Fragment() {
                     getString(R.string.detail_available, pack.available)
                 setNewAvailable(pack)
                 context?.let { context ->
-                    val packageServiceRef =
-                        FirebaseStorage.getInstance().reference.child(pack.administratorId)
-                            .child(Constants.PATH_PACKAGE_SERVICE_IMAGES)
-                            .child(pack.id!!)
-                    packageServiceRef.listAll().addOnSuccessListener { imgList ->
-                        val detailAdapter = DetailAdapter(imgList.items, context)
+                    val packageServiceRef = Firebase.storage.reference.child(pack.administratorId)
+                        .child(Constants.PATH_PACKAGE_SERVICE_IMAGES).child(pack.id!!)
+                    packageServiceRef.listAll().addOnSuccessListener { pictureList ->
+                        val detailAdapter = DetailAdapter(pictureList.items, context)
                         binding.vpPackageService.apply {
                             adapter = detailAdapter
                         }
@@ -146,7 +145,7 @@ class DetailFragment : Fragment() {
     }
 
     private fun addToContractList(packageService: PackageService) {
-        (activity as? MainAux)?.let { mainAux ->
+        (activity as? OnMethodsToMainActivity)?.let { mainAux ->
             mainAux.addPackageServiceToContractList(packageService)
             activity?.onBackPressed()
         }

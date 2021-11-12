@@ -22,11 +22,12 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.manuel.red.R
 import com.manuel.red.databinding.FragmentProfileBinding
-import com.manuel.red.package_service.MainAux
+import com.manuel.red.package_service.OnMethodsToMainActivity
 import com.manuel.red.utils.Constants
 import com.manuel.red.utils.TimestampToText
 import java.io.ByteArrayOutputStream
@@ -36,7 +37,7 @@ class ProfileFragment : Fragment() {
     private var binding: FragmentProfileBinding? = null
     private var photoSelectedUri: Uri? = null
     private var mainTitle = ""
-    private val errorSnack: Snackbar by lazy {
+    private val snackBar: Snackbar by lazy {
         Snackbar.make(binding!!.root, "", Snackbar.LENGTH_SHORT).setTextColor(Color.YELLOW)
     }
     private val resultLauncher =
@@ -46,7 +47,7 @@ class ProfileFragment : Fragment() {
                 binding?.let { view ->
                     Glide.with(this).load(photoSelectedUri).diskCacheStrategy(DiskCacheStrategy.ALL)
                         .placeholder(R.drawable.ic_cloud_download)
-                        .error(R.drawable.ic_error_outline).into(view.imgProfile)
+                        .error(R.drawable.ic_broken_image).into(view.imgProfile)
                 }
             }
         }
@@ -78,7 +79,7 @@ class ProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (activity as? MainAux)?.showButton(true)
+        (activity as? OnMethodsToMainActivity)?.showButton(true)
         binding = null
     }
 
@@ -111,7 +112,7 @@ class ProfileFragment : Fragment() {
     private fun getUser() {
         binding?.let { binding ->
             FirebaseAuth.getInstance().currentUser?.let { user ->
-                val db = FirebaseFirestore.getInstance()
+                val db = Firebase.firestore
                 val docRef = db.collection(Constants.COLL_USERS).document(user.uid)
                 docRef.get().addOnSuccessListener { document ->
                     if (document != null) {
@@ -122,7 +123,7 @@ class ProfileFragment : Fragment() {
                             }."
                     }
                 }.addOnFailureListener {
-                    errorSnack.apply {
+                    snackBar.apply {
                         setText(getString(R.string.failed_to_get_the_last_modification))
                         show()
                     }
@@ -131,7 +132,7 @@ class ProfileFragment : Fragment() {
                     "${getString(R.string.subscriber_number)}: ${user.uid}"
                 binding.etFullName.setText(user.displayName)
                 Glide.with(this).load(user.photoUrl).diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_error_outline)
+                    .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_broken_image)
                     .into(binding.imgProfile)
                 setupActionBar()
             }
@@ -178,7 +179,7 @@ class ProfileFragment : Fragment() {
                     Constants.PROP_USERNAME to user.displayName.toString(),
                     Constants.PROP_PROFILE_PICTURE to user.photoUrl.toString()
                 )
-                val db = FirebaseFirestore.getInstance()
+                val db = Firebase.firestore
                 db.collection(Constants.COLL_USERS).document(user.uid).update(userMap)
                     .addOnSuccessListener {
                         Toast.makeText(
@@ -187,17 +188,17 @@ class ProfileFragment : Fragment() {
                             Toast.LENGTH_SHORT
                         ).show()
                         mainTitle = user.displayName.toString()
-                        (activity as? MainAux)?.updateTitle(user)
+                        (activity as? OnMethodsToMainActivity)?.updateTitle(user)
                         activity?.onBackPressed()
                     }.addOnFailureListener {
-                        errorSnack.apply {
+                        snackBar.apply {
                             setText(getString(R.string.error_editing_profile_with_firebase_firestore))
                             show()
                         }
                         enableAllInterface(true)
                     }
             }.addOnFailureListener {
-                errorSnack.apply {
+                snackBar.apply {
                     setText(getString(R.string.error_editing_profile_with_firebase_ui))
                     show()
                 }
@@ -216,9 +217,8 @@ class ProfileFragment : Fragment() {
 
     @SuppressLint("SetTextI18n")
     private fun uploadReducedImage(user: FirebaseUser) {
-        val profileRef =
-            FirebaseStorage.getInstance().reference.child(user.uid).child(Constants.PATH_PROFIlE)
-                .child(Constants.MY_IMAGE)
+        val profileRef = Firebase.storage.reference.child(user.uid).child(Constants.PATH_PROFIlE)
+            .child(Constants.MY_IMAGE)
         photoSelectedUri?.let { uri ->
             binding?.let { binding ->
                 getBitmapFromUri(uri)?.let { bitmap ->
@@ -247,7 +247,7 @@ class ProfileFragment : Fragment() {
                                 updateUserProfile(binding, user, downloadUrl)
                             }
                         }.addOnFailureListener {
-                            errorSnack.apply {
+                            snackBar.apply {
                                 setText(getString(R.string.image_upload_error))
                                 show()
                             }

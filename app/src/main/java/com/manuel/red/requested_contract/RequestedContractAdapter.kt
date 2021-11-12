@@ -56,7 +56,7 @@ class RequestedContractAdapter(
         holder.binding.tvDate.text = time
     }
 
-    override fun getItemCount(): Int = requestedContractList.size
+    override fun getItemCount() = requestedContractList.size
     fun add(requestedContract: RequestedContract) {
         if (!requestedContractList.contains(requestedContract)) {
             requestedContractList.add(requestedContract)

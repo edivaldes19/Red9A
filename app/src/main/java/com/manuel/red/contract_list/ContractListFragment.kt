@@ -16,14 +16,14 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.manuel.red.R
 import com.manuel.red.databinding.FragmentContractListBinding
 import com.manuel.red.models.PackageService
 import com.manuel.red.models.PackageServiceContract
 import com.manuel.red.models.RequestedContract
-import com.manuel.red.package_service.MainAux
+import com.manuel.red.package_service.OnMethodsToMainActivity
 import com.manuel.red.requested_contract.RequestedContractActivity
 import com.manuel.red.utils.Constants
 import java.util.*
@@ -32,8 +32,8 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
     private var binding: FragmentContractListBinding? = null
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
     private lateinit var packageServiceContractListAdapter: PackageServiceContractListAdapter
-    private var totalPrice = 0
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private var totalPrice = 0
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = FragmentContractListBinding.inflate(LayoutInflater.from(activity))
         binding?.let { view ->
@@ -73,9 +73,10 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
     }
 
     private fun getPackageServices() {
-        (activity as? MainAux)?.getPackagesServicesContractList()?.forEach { packageService ->
-            packageServiceContractListAdapter.add(packageService)
-        }
+        (activity as? OnMethodsToMainActivity)?.getPackagesServicesContractList()
+            ?.forEach { packageService ->
+                packageServiceContractListAdapter.add(packageService)
+            }
     }
 
     private fun setupAnalytics() {
@@ -104,20 +105,20 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
                 status = 1,
                 requested = Date().time
             )
-            val db = FirebaseFirestore.getInstance()
-            val requestDoc = db.collection(Constants.COLL_CONTRACTS_REQUESTED).document()
-            val packageServicesRef = db.collection(Constants.COLL_PACKAGE_SERVICE)
+            val db = Firebase.firestore
+            val documentReference = db.collection(Constants.COLL_CONTRACTS_REQUESTED).document()
+            val collectionReference = db.collection(Constants.COLL_PACKAGE_SERVICE)
             db.runBatch { batch ->
-                batch.set(requestDoc, requestedContract)
+                batch.set(documentReference, requestedContract)
                 requestedContract.packagesServices.forEach { entry ->
                     batch.update(
-                        packageServicesRef.document(entry.key), Constants.PROP_AVAILABLE,
+                        collectionReference.document(entry.key), Constants.PROP_AVAILABLE,
                         FieldValue.increment(-entry.value.available.toLong())
                     )
                 }
             }.addOnSuccessListener {
                 dismiss()
-                (activity as? MainAux)?.clearContractList()
+                (activity as? OnMethodsToMainActivity)?.clearContractList()
                 startActivity(Intent(context, RequestedContractActivity::class.java))
                 Toast.makeText(
                     activity,
@@ -163,7 +164,7 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
     }
 
     override fun onDestroyView() {
-        (activity as? MainAux)?.updateTotal()
+        (activity as? OnMethodsToMainActivity)?.updateTotal()
         super.onDestroyView()
         binding = null
     }

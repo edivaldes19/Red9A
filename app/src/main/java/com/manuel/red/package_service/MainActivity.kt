@@ -36,10 +36,10 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.ktx.messaging
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.manuel.red.R
@@ -57,7 +57,7 @@ import com.manuel.red.utils.Constants
 import java.security.MessageDigest
 import java.util.*
 
-class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
+class MainActivity : AppCompatActivity(), OnPackageServiceListener, OnMethodsToMainActivity,
     ConnectionReceiver.ReceiverListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var firebaseAuth: FirebaseAuth
@@ -65,10 +65,10 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     private lateinit var packageServiceAdapter: PackageServiceAdapter
     private lateinit var listenerRegistration: ListenerRegistration
     private var packageServiceSelected: PackageService? = null
-    private val packageServiceContractList: MutableList<PackageService> = mutableListOf()
-    private var packageServiceList: MutableList<PackageService> = mutableListOf()
+    private val packageServiceContractList = mutableListOf<PackageService>()
+    private var packageServiceList = mutableListOf<PackageService>()
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-    private val errorSnack: Snackbar by lazy {
+    private val snackBar: Snackbar by lazy {
         Snackbar.make(binding.root, "", Snackbar.LENGTH_SHORT).setTextColor(Color.YELLOW)
     }
     private val resultLauncher =
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
                             Constants.PROP_USERNAME to user.displayName.toString(),
                             Constants.PROP_PROFILE_PICTURE to user.photoUrl.toString()
                         )
-                        val db = FirebaseFirestore.getInstance()
+                        val db = Firebase.firestore
                         db.collection(Constants.COLL_USERS).document(user.uid).run {
                             set(userMap)
                             collection(Constants.COLL_TOKENS).add(tokenMap)
@@ -108,12 +108,12 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
                 } else {
                     response.error?.let { firebaseUiException ->
                         if (firebaseUiException.errorCode == ErrorCodes.NO_NETWORK) {
-                            errorSnack.apply {
+                            snackBar.apply {
                                 setText(getString(R.string.network_error_check_your_connection))
                                 show()
                             }
                         } else {
-                            errorSnack.apply {
+                            snackBar.apply {
                                 setText("${getString(R.string.error_code)}: ${firebaseUiException.errorCode}")
                                 show()
                             }
@@ -134,8 +134,8 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         setupRecyclerView()
         setupButtons()
         setupAnalytics()
-        checkConnection()
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+        checkInternetConnection()
+        Firebase.messaging.token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val token = task.result
                 val preferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -167,22 +167,19 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         val searchView = menuItem?.actionView as SearchView
         searchView.queryHint = getString(R.string.search_by_name)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
+            override fun onQueryTextSubmit(query: String?) = false
             override fun onQueryTextChange(newText: String?): Boolean {
-                val temporaryList: MutableList<PackageService> = mutableListOf()
+                val filteredList = mutableListOf<PackageService>()
                 for (packageService in packageServiceList) {
                     if (newText!! in packageService.name.toString()) {
-                        temporaryList.add(packageService)
+                        filteredList.add(packageService)
                     }
                 }
-                packageServiceAdapter.updateList(temporaryList)
-                if (temporaryList.isNullOrEmpty()) {
-                    binding.tvWithoutResults.visibility = View.VISIBLE
+                packageServiceAdapter.updateList(filteredList)
+                binding.tvWithoutResults.visibility = if (filteredList.isNullOrEmpty()) {
+                    View.VISIBLE
                 } else {
-                    binding.tvWithoutResults.visibility = View.GONE
+                    View.GONE
                 }
                 return false
             }
@@ -231,7 +228,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
                                 binding.nsvPackageServices.visibility = View.GONE
                                 binding.llProgress.visibility = View.VISIBLE
                             } else {
-                                errorSnack.apply {
+                                snackBar.apply {
                                     setText(getString(R.string.failed_to_log_out))
                                     show()
                                 }
@@ -260,9 +257,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
         }
     }
 
-    override fun getPackagesServicesContractList(): MutableList<PackageService> =
-        packageServiceContractList
-
+    override fun getPackagesServicesContractList() = packageServiceContractList
     override fun getPackageServiceSelected(): PackageService? = packageServiceSelected
     override fun showButton(isVisible: Boolean) {
         binding.btnViewContractList.visibility = if (isVisible) View.VISIBLE else View.GONE
@@ -301,29 +296,30 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     }
 
     override fun onNetworkChange(isConnected: Boolean) {
-        showNetworkErrorToast(isConnected)
+        showNetworkErrorSnackBar(isConnected)
     }
 
-    private fun checkConnection() {
+    private fun checkInternetConnection() {
         val intentFilter = IntentFilter()
-        intentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE")
+        intentFilter.addAction(Constants.ACTION_INTENT)
         registerReceiver(ConnectionReceiver(), intentFilter)
         ConnectionReceiver.receiverListener = this
         val manager =
             applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = manager.activeNetworkInfo
         val isConnected = networkInfo != null && networkInfo.isConnectedOrConnecting
-        showNetworkErrorToast(isConnected)
+        showNetworkErrorSnackBar(isConnected)
     }
 
-    private fun showNetworkErrorToast(connected: Boolean) {
-        if (!connected) {
-            Toast.makeText(
-                this,
-                getString(R.string.network_error_check_your_connection),
-                Toast.LENGTH_LONG
-            ).show()
-            startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+    private fun showNetworkErrorSnackBar(isConnected: Boolean) {
+        if (!isConnected) {
+            Snackbar.make(
+                binding.root,
+                getString(R.string.no_network_connection),
+                Snackbar.LENGTH_INDEFINITE
+            ).setTextColor(Color.WHITE)
+                .setAction(getString(R.string.go_to_settings)) { startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) }
+                .show()
         }
     }
 
@@ -431,20 +427,20 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, MainAux,
     }
 
     private fun setupFirestoreInRealtime() {
-        val db = FirebaseFirestore.getInstance()
+        val db = Firebase.firestore
         val packageServiceRef = db.collection(Constants.COLL_PACKAGE_SERVICE)
-        listenerRegistration = packageServiceRef.addSnapshotListener { snapshots, error ->
+        listenerRegistration = packageServiceRef.addSnapshotListener { querySnapshot, error ->
             if (error != null) {
-                errorSnack.apply {
+                snackBar.apply {
                     setText(getString(R.string.failed_to_query_the_data))
                     show()
                 }
                 return@addSnapshotListener
             }
-            for (snapshot in snapshots!!.documentChanges) {
-                val packageService = snapshot.document.toObject(PackageService::class.java)
-                packageService.id = snapshot.document.id
-                when (snapshot.type) {
+            for (documentChange in querySnapshot!!.documentChanges) {
+                val packageService = documentChange.document.toObject(PackageService::class.java)
+                packageService.id = documentChange.document.id
+                when (documentChange.type) {
                     DocumentChange.Type.ADDED -> packageServiceAdapter.add(packageService)
                     DocumentChange.Type.MODIFIED -> packageServiceAdapter.update(packageService)
                     DocumentChange.Type.REMOVED -> packageServiceAdapter.delete(packageService)

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.radiobutton.MaterialRadioButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -19,9 +20,9 @@ import com.manuel.red.utils.TextWatchers
 
 class SendEmailFragment : DialogFragment(), DialogInterface.OnShowListener {
     private var binding: FragmentSendAnEmailBinding? = null
-    private var sendButton: MaterialButton? = null
-    private var cancelButton: MaterialButton? = null
-    private val errorSnack: Snackbar by lazy {
+    private var fabSendEmail: FloatingActionButton? = null
+    private var fabCancel: FloatingActionButton? = null
+    private val snackBar: Snackbar by lazy {
         Snackbar.make(binding!!.root, "", Snackbar.LENGTH_SHORT).setTextColor(Color.YELLOW)
     }
 
@@ -29,11 +30,11 @@ class SendEmailFragment : DialogFragment(), DialogInterface.OnShowListener {
         activity?.let { activity ->
             binding = FragmentSendAnEmailBinding.inflate(LayoutInflater.from(context))
             binding?.let { view ->
-                sendButton = view.btnSendEmail
-                cancelButton = view.btnCancel
+                fabSendEmail = view.fabSendEmail
+                fabCancel = view.fabCancel
                 TextWatchers.validateFieldsAsYouType(
                     activity,
-                    sendButton!!,
+                    fabSendEmail!!,
                     view.etEmail,
                     view.etMessage
                 )
@@ -66,7 +67,7 @@ class SendEmailFragment : DialogFragment(), DialogInterface.OnShowListener {
                         radio.text.toString().trim()
                     } ${getString(R.string.of)} ${getString(R.string.app_name)}"
                 }
-                sendButton?.setOnClickListener {
+                fabSendEmail?.setOnClickListener {
                     if (view.rbComplain.isChecked || view.rbSuggestion.isChecked) {
                         val javaMailAPI = JavaMailAPI(
                             context,
@@ -77,17 +78,17 @@ class SendEmailFragment : DialogFragment(), DialogInterface.OnShowListener {
                             alertDialog
                         )
                         javaMailAPI.execute()
-                        cancelButton?.isEnabled = false
-                        sendButton?.isEnabled = false
+                        fabCancel?.isEnabled = false
+                        fabSendEmail?.isEnabled = false
                     } else {
-                        errorSnack.apply {
+                        snackBar.apply {
                             setText(getString(R.string.you_must_select_the_subject_type))
                             show()
                         }
                     }
                 }
             }
-            cancelButton?.setOnClickListener {
+            fabCancel?.setOnClickListener {
                 alertDialog.dismiss()
             }
         }

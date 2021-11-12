@@ -29,11 +29,11 @@ class PackageServiceContractListAdapter(
         holder.binding.tvName.text = packageService.name
         holder.binding.tvAmount.text = packageService.newAvailable.toString()
         Glide.with(context).load(packageService.imagePath).diskCacheStrategy(DiskCacheStrategy.ALL)
-            .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_error_outline)
+            .placeholder(R.drawable.ic_cloud_download).error(R.drawable.ic_broken_image)
             .into(holder.binding.imgPackageService)
     }
 
-    override fun getItemCount(): Int = packageServiceList.size
+    override fun getItemCount() = packageServiceList.size
     fun add(packageService: PackageService) {
         if (!packageServiceList.contains(packageService)) {
             packageServiceList.add(packageService)
