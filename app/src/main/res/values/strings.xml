@@ -10,8 +10,7 @@
     <string name="add_package">Agregar paquete</string>
     <string name="delete">Eliminar</string>
     <string name="removed">eliminado</string>
-    <string name="remove_package">Eliminar paquete</string>
-    <string name="remove_contract">Eliminar contrato</string>
+    <string name="delete_contract">¿Eliminar contrato?</string>
     <string name="update">Actualizar</string>
     <string name="update_package">Actualizar paquete</string>
     <string name="are_you_sure_to_take_this_action">¿Está seguro de realizar esta acción?</string>
@@ -38,6 +37,7 @@
     <string name="message_deleted">Mensaje borrado exitosamente.</string>
     <string name="status">Estado</string>
     <string name="contract_id">ID de Contrato: %1$s</string>
+    <string name="contract_id_text_only">ID de Contrato</string>
     <string name="need_help">¿Necesitas ayuda?</string>
     <string name="total_price">Precio total: $%1$d MXN</string>
     <string name="failed_to_query_the_data">Error al consultar los datos.</string>

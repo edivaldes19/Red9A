@@ -14,7 +14,7 @@ import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.forEachIndexed
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -94,7 +94,7 @@ class ProfileFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        menu.forEachIndexed { _, item ->
+        menu.forEach { item ->
             item.isVisible = false
         }
     }
@@ -151,7 +151,7 @@ class ProfileFragment : Fragment() {
                     if (photoSelectedUri == null) {
                         updateUserProfile(binding, user, Uri.parse(""))
                     } else {
-                        uploadReducedImage(user)
+                        uploadCompressedImage(user)
                     }
                 }
             }
@@ -216,7 +216,7 @@ class ProfileFragment : Fragment() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun uploadReducedImage(user: FirebaseUser) {
+    private fun uploadCompressedImage(user: FirebaseUser) {
         val profileRef = Firebase.storage.reference.child(user.uid).child(Constants.PATH_PROFIlE)
             .child(Constants.MY_IMAGE)
         photoSelectedUri?.let { uri ->
@@ -274,7 +274,9 @@ class ProfileFragment : Fragment() {
     private fun getResizedImage(image: Bitmap): Bitmap {
         var width = image.width
         var height = image.height
-        if (width <= 256 && height <= 256) return image
+        if (width <= 256 && height <= 256) {
+            return image
+        }
         val bitmapRatio = width.toFloat() / height.toFloat()
         if (bitmapRatio > 1) {
             width = 256

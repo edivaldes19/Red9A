@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, OnMethodsToM
             override fun onQueryTextChange(newText: String?): Boolean {
                 val filteredList = mutableListOf<PackageService>()
                 for (packageService in packageServiceList) {
-                    if (newText!! in packageService.name.toString()) {
+                    if (newText!!.lowercase() in packageService.name.toString().lowercase()) {
                         filteredList.add(packageService)
                     }
                 }
@@ -258,7 +258,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, OnMethodsToM
     }
 
     override fun getPackagesServicesContractList() = packageServiceContractList
-    override fun getPackageServiceSelected(): PackageService? = packageServiceSelected
+    override fun getPackageServiceSelected() = packageServiceSelected
     override fun showButton(isVisible: Boolean) {
         binding.btnViewContractList.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
@@ -287,18 +287,12 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, OnMethodsToM
         }
     }
 
-    override fun clearContractList() {
-        packageServiceContractList.clear()
-    }
-
+    override fun clearContractList() = packageServiceContractList.clear()
     override fun updateTitle(user: FirebaseUser) {
         supportActionBar?.title = user.displayName
     }
 
-    override fun onNetworkChange(isConnected: Boolean) {
-        showNetworkErrorSnackBar(isConnected)
-    }
-
+    override fun onNetworkChange(isConnected: Boolean) = showNetworkErrorSnackBar(isConnected)
     private fun checkInternetConnection() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(Constants.ACTION_INTENT)
@@ -327,7 +321,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, OnMethodsToM
     private fun setupRemoteConfig() {
         val remoteConfig = Firebase.remoteConfig
         val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 10
+            minimumFetchIntervalInSeconds = 60
         }
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.setDefaultsAsync(R.xml.remote_config_defaults)

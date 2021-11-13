@@ -72,12 +72,9 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
         }
     }
 
-    private fun getPackageServices() {
+    private fun getPackageServices() =
         (activity as? OnMethodsToMainActivity)?.getPackagesServicesContractList()
-            ?.forEach { packageService ->
-                packageServiceContractListAdapter.add(packageService)
-            }
-    }
+            ?.forEach { packageService -> packageServiceContractListAdapter.add(packageService) }
 
     private fun setupAnalytics() {
         firebaseAnalytics = Firebase.analytics
@@ -169,9 +166,8 @@ class ContractListFragment : BottomSheetDialogFragment(), OnContractListListener
         binding = null
     }
 
-    override fun setAmount(packageService: PackageService) {
+    override fun setAmount(packageService: PackageService) =
         packageServiceContractListAdapter.update(packageService)
-    }
 
     override fun showTotal(total: Int) {
         totalPrice = total

@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
-import androidx.core.view.forEachIndexed
+import androidx.core.view.forEach
 import androidx.fragment.app.Fragment
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -62,7 +62,7 @@ class DetailFragment : Fragment() {
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        menu.forEachIndexed { _, item ->
+        menu.forEach { item ->
             item.isVisible = false
         }
     }
@@ -144,12 +144,11 @@ class DetailFragment : Fragment() {
         }
     }
 
-    private fun addToContractList(packageService: PackageService) {
-        (activity as? OnMethodsToMainActivity)?.let { mainAux ->
-            mainAux.addPackageServiceToContractList(packageService)
+    private fun addToContractList(packageService: PackageService) =
+        (activity as? OnMethodsToMainActivity)?.let { toMainActivity ->
+            toMainActivity.addPackageServiceToContractList(packageService)
             activity?.onBackPressed()
         }
-    }
 
     private fun setupActionBar() {
         (activity as? AppCompatActivity)?.let { activity ->

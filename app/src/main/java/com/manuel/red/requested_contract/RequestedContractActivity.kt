@@ -69,7 +69,7 @@ class RequestedContractActivity : AppCompatActivity(), OnRequestedContractListen
             override fun onQueryTextChange(newText: String?): Boolean {
                 val filteredList = mutableListOf<RequestedContract>()
                 for (requestedContract in requestedContractList) {
-                    if (newText!! in requestedContract.id) {
+                    if (newText!!.lowercase() in requestedContract.id.lowercase()) {
                         filteredList.add(requestedContract)
                     }
                 }
@@ -101,8 +101,8 @@ class RequestedContractActivity : AppCompatActivity(), OnRequestedContractListen
 
     override fun onDeleteRequestedContract(requestedContract: RequestedContract) {
         requestedContractSelected = requestedContract
-        MaterialAlertDialogBuilder(this).setTitle(getString(R.string.remove_contract))
-            .setMessage(getString(R.string.are_you_sure_to_take_this_action))
+        MaterialAlertDialogBuilder(this).setTitle(getString(R.string.delete_contract))
+            .setMessage("${getString(R.string.contract_id_text_only)}: ${requestedContract.id}")
             .setPositiveButton(getString(R.string.delete)) { _, _ ->
                 val db = Firebase.firestore
                 val requestedContractRef = db.collection(Constants.COLL_CONTRACTS_REQUESTED)
@@ -123,11 +123,8 @@ class RequestedContractActivity : AppCompatActivity(), OnRequestedContractListen
             }.setNegativeButton(getString(R.string.cancel), null).show()
     }
 
-    override fun getRequestedContractSelected(): RequestedContract = requestedContractSelected
-    override fun onNetworkChange(isConnected: Boolean) {
-        showNetworkErrorSnackBar(isConnected)
-    }
-
+    override fun getRequestedContractSelected() = requestedContractSelected
+    override fun onNetworkChange(isConnected: Boolean) = showNetworkErrorSnackBar(isConnected)
     private fun checkInternetConnection() {
         val intentFilter = IntentFilter()
         intentFilter.addAction(Constants.ACTION_INTENT)
