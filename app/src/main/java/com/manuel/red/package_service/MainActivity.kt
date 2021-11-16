@@ -202,10 +202,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, OnMethodsToM
                 showButton(false)
             }
             R.id.action_requested_contract_history -> startActivity(
-                Intent(
-                    this,
-                    RequestedContractActivity::class.java
-                )
+                Intent(this, RequestedContractActivity::class.java)
             )
             R.id.action_settings -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
@@ -216,7 +213,7 @@ class MainActivity : AppCompatActivity(), OnPackageServiceListener, OnMethodsToM
             R.id.action_sign_off -> {
                 MaterialAlertDialogBuilder(this).setTitle(getString(R.string.sign_off))
                     .setMessage(getString(R.string.are_you_sure_to_take_this_action))
-                    .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    .setPositiveButton(getString(R.string.sign_off)) { _, _ ->
                         AuthUI.getInstance().signOut(this).addOnSuccessListener {
                             Toast.makeText(
                                 this,
